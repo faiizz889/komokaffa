@@ -1,71 +1,224 @@
 document.addEventListener("DOMContentLoaded", () => {
     gsap.registerPlugin(ScrollTrigger);
 
+   // =========================================================================
+    // 1. ZERO-GLITCH SLIDING NAVBAR PILL + SCROLL PROGRESS + COFFEE EMBLEM SPIN
     // =========================================================================
-    // 1. REAL-TIME WORKING SLIDING NAVBAR PILL (SYNCED WITH SCROLL & CLICK)
-    // =========================================================================
-    const navLinks = document.querySelectorAll(".nav-link");
+    const siteHeader = document.getElementById("siteHeader");
+    const navTrack = document.getElementById("navTrack");
+    const navLinks = Array.from(document.querySelectorAll(".nav-link"));
+    const mobileLinks = Array.from(document.querySelectorAll(".m-nav-link"));
     const navPill = document.getElementById("navPill");
-    const sections = document.querySelectorAll(".page-section");
+    const navScrollProgress = document.getElementById("navScrollProgress");
+    const coffeeEmblem = document.querySelector(".coffee-emblem");
+    const sections = Array.from(document.querySelectorAll(".page-section"));
 
-    function moveNavPill(targetLink) {
-        if (!targetLink || !navPill) return;
-        navLinks.forEach((l) => l.classList.remove("active"));
-        targetLink.classList.add("active");
+    // Mutex lock prevents IntersectionObserver from fighting click-initiated smooth scrolls
+    let isClickScrolling = false;
+    let scrollUnlockTimer = null;
 
-        const linkRect = targetLink.getBoundingClientRect();
-        const trackRect = targetLink.parentElement.getBoundingClientRect();
-        const offsetLeft = linkRect.left - trackRect.left - 4;
+    function syncNavPill(activeLink, animate = true) {
+        if (!activeLink || !navPill || !navTrack) return;
 
-        navPill.style.width = `${linkRect.width}px`;
-        navPill.style.transform = `translateX(${offsetLeft}px)`;
+        // Use offsetLeft & offsetWidth relative to .nav-track (100% immune to scroll/transform glitches)
+        const targetWidth = activeLink.offsetWidth;
+        const targetLeft = activeLink.offsetLeft;
+
+        if (!animate) {
+            navPill.style.transition = "none";
+        } else {
+            navPill.style.transition =
+                "transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), width 0.36s cubic-bezier(0.22, 1, 0.36, 1)";
+        }
+
+        navPill.style.width = `${targetWidth}px`;
+        navPill.style.transform = `translate3d(${targetLeft}px, 0, 0)`;
+
+        if (!animate) {
+            // Force reflow so subsequent transitions stay silky
+            void navPill.offsetWidth;
+            navPill.style.transition = "";
+        }
     }
 
-    // Initialize Pill on Load & Window Resize
-    const initActiveLink = document.querySelector(".nav-link.active");
-    setTimeout(() => moveNavPill(initActiveLink), 60);
-    window.addEventListener("resize", () => {
-        const current = document.querySelector(".nav-link.active");
-        moveNavPill(current);
-    });
+    function setActiveSection(sectionId, animate = true) {
+        const targetDesktopLink = navLinks.find((l) => l.dataset.section === sectionId);
+        if (targetDesktopLink) {
+            navLinks.forEach((l) => l.classList.remove("active"));
+            targetDesktopLink.classList.add("active");
+            syncNavPill(targetDesktopLink, animate);
+        }
 
-    // Click handler for instant pill glide
+        mobileLinks.forEach((m) => {
+            m.classList.toggle("active", m.dataset.section === sectionId);
+        });
+    }
+
+    // Initialize position immediately + after Google Fonts finish rendering
+    const initialActive = document.querySelector(".nav-link.active") || navLinks[0];
+    syncNavPill(initialActive, false);
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+            const current = document.querySelector(".nav-link.active") || navLinks[0];
+            syncNavPill(current, false);
+        });
+    }
+
+    // Keep pill pixel-accurate on any window or track resize
+    if (typeof ResizeObserver !== "undefined" && navTrack) {
+        const trackObserver = new ResizeObserver(() => {
+            const current = document.querySelector(".nav-link.active") || navLinks[0];
+            syncNavPill(current, false);
+        });
+        trackObserver.observe(navTrack);
+    }
+
+    // Click handler with scroll-lock mutex so the pill glides straight to the clicked tab
     navLinks.forEach((link) => {
-        link.addEventListener("click", () => moveNavPill(link));
+        link.addEventListener("click", (e) => {
+            const sectionId = link.dataset.section;
+            const targetSection = document.getElementById(sectionId);
+            if (!targetSection) return;
+
+            e.preventDefault();
+            isClickScrolling = true;
+            clearTimeout(scrollUnlockTimer);
+
+            setActiveSection(sectionId, true);
+
+            const headerOffset = 82;
+            const targetY = targetSection.getBoundingClientRect().top + window.scrollY - headerOffset;
+            window.scrollTo({ top: targetY, behavior: "smooth" });
+
+            // Release mutex once smooth scroll settles
+            scrollUnlockTimer = setTimeout(() => {
+                isClickScrolling = false;
+            }, 850);
+        });
     });
 
-    // Scroll Spy via IntersectionObserver to keep Navbar Pill 100% synced
-    const sectionObserver = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute("id");
-                    const matchingLink = document.querySelector(`.nav-link[data-section="${id}"]`);
-                    if (matchingLink) moveNavPill(matchingLink);
+    // Scroll-Spy via RAF-throttled scroll listener (more deterministic than multi-threshold IntersectionObserver)
+    let scrollTicking = false;
+    function onWindowScroll() {
+        const scrollY = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0;
+
+        // 1. Compact header state & 1px espresso progress bar
+        siteHeader.classList.toggle("is-compact", scrollY > 40);
+        if (navScrollProgress) {
+            navScrollProgress.style.transform = `scaleX(${progress})`;
+        }
+
+        // 2. Subtle coffee bean emblem rotation synced with scroll
+        if (coffeeEmblem) {
+            coffeeEmblem.style.transform = `rotate(${scrollY * 0.08}deg)`;
+        }
+
+        // 3. Determine active section if not currently locked by a click scroll
+        if (!isClickScrolling) {
+            const triggerPoint = scrollY + window.innerHeight * 0.32;
+            let currentSectionId = sections[0]?.id || "home";
+
+            for (const sec of sections) {
+                if (sec.offsetTop <= triggerPoint) {
+                    currentSectionId = sec.id;
                 }
-            });
+            }
+            setActiveSection(currentSectionId, true);
+        }
+
+        scrollTicking = false;
+    }
+
+    window.addEventListener(
+        "scroll",
+        () => {
+            if (!scrollTicking) {
+                window.requestAnimationFrame(onWindowScroll);
+                scrollTicking = true;
+            }
         },
-        { rootMargin: "-35% 0px -55% 0px", threshold: 0 }
+        { passive: true }
     );
-    sections.forEach((sec) => sectionObserver.observe(sec));
+
+    // Live Ahmedabad (IST) Store Status & Clock inside Navbar
+    function updateAhmedabadClock() {
+        const clockEl = document.getElementById("amdavadClock");
+        const dotEl = document.getElementById("storeStatusDot");
+        if (!clockEl) return;
+
+        try {
+            const now = new Date();
+            const istTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+            const hours = istTime.getHours();
+            // KOMO is open from 11:00 AM until 1:00 AM daily
+            const isOpen = hours >= 11 || hours < 1;
+            const timeStr = istTime.toLocaleTimeString("en-IN", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true
+            });
+
+            clockEl.textContent = isOpen
+                ? `AMD ${timeStr} · Open til 1 AM`
+                : `AMD ${timeStr} · Opens 11 AM`;
+
+            if (dotEl) dotEl.classList.toggle("closed", !isOpen);
+        } catch (err) {
+            clockEl.textContent = "AMD · Open til 1 AM";
+        }
+    }
+    updateAhmedabadClock();
+    setInterval(updateAhmedabadClock, 30000);
 
     // =========================================================================
-    // 2. MOBILE & TABLET DRAWER NAVIGATION
+    // 2. MOBILE & TABLET ARCHITECTURAL DRAWER (WITH BACKDROP & ESC KEY)
     // =========================================================================
     const menuToggle = document.getElementById("menuToggle");
     const mobileMenu = document.getElementById("mobileMenu");
+    const mobileBackdrop = document.getElementById("mobileBackdrop");
 
-    menuToggle.addEventListener("click", () => {
-        const isOpen = menuToggle.classList.toggle("open");
-        mobileMenu.classList.toggle("open", isOpen);
-        menuToggle.setAttribute("aria-expanded", isOpen);
+    function toggleMobileMenu(forceState) {
+        const shouldOpen =
+            typeof forceState === "boolean"
+                ? forceState
+                : !mobileMenu.classList.contains("open");
+
+        menuToggle.classList.toggle("open", shouldOpen);
+        mobileMenu.classList.toggle("open", shouldOpen);
+        menuToggle.setAttribute("aria-expanded", String(shouldOpen));
+        mobileMenu.setAttribute("aria-hidden", String(!shouldOpen));
+        document.body.style.overflow = shouldOpen ? "hidden" : "";
+    }
+
+    if (menuToggle) {
+        menuToggle.addEventListener("click", () => toggleMobileMenu());
+    }
+    if (mobileBackdrop) {
+        mobileBackdrop.addEventListener("click", () => toggleMobileMenu(false));
+    }
+
+    mobileLinks.forEach((mLink) => {
+        mLink.addEventListener("click", (e) => {
+            const sectionId = mLink.dataset.section;
+            const targetSection = document.getElementById(sectionId);
+            toggleMobileMenu(false);
+
+            if (targetSection) {
+                e.preventDefault();
+                setActiveSection(sectionId, true);
+                const targetY = targetSection.getBoundingClientRect().top + window.scrollY - 76;
+                window.scrollTo({ top: targetY, behavior: "smooth" });
+            }
+        });
     });
 
-    document.querySelectorAll(".m-nav-link").forEach((mLink) => {
-        mLink.addEventListener("click", () => {
-            menuToggle.classList.remove("open");
-            mobileMenu.classList.remove("open");
-        });
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && mobileMenu.classList.contains("open")) {
+            toggleMobileMenu(false);
+        }
     });
 
     // =========================================================================
@@ -105,44 +258,47 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // =========================================================================
-    // 4. HERO CAVE ARCH VIEWPORT (4 REAL PHOTOS + 0:23 VIDEO REEL SWITCHER)
+    // 4. HERO KINETIC ACCORDION DECK (HOVER / TAP TO EXPAND + VIDEO PLAYBACK)
     // =========================================================================
-    const heroStills = document.querySelectorAll(".hero-still");
-    const thumbBtns = document.querySelectorAll(".thumb-btn");
-    const stillsLayer = document.getElementById("stillsLayer");
-    const videoLayer = document.getElementById("videoLayer");
+    const deckSlices = document.querySelectorAll(".deck-slice");
     const cafeReelVideo = document.getElementById("cafeReelVideo");
-    const archCaption = document.getElementById("archCaption");
+    const videoSoundBtn = document.getElementById("videoSoundBtn");
 
-    const heroCaptions = [
-        "Fig 01. Undulating Stucco Ceiling & Recessed Cove Light",
-        "Fig 02. 16-Seater Communal Timber Table & Backlit Pottery Wall",
-        "Fig 03. Hand-Embossed Tree Branch Relief & Mirror KOMO Sign",
-        "Fig 04. Bodakdev Daylight Sand-Stucco Exterior Monolith"
-    ];
+    // Ensure the video starts playing immediately on load
+    if (cafeReelVideo) {
+        cafeReelVideo.play().catch(() => {});
+    }
 
-    thumbBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            thumbBtns.forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
+    function activateSlice(slice) {
+        deckSlices.forEach((s) => s.classList.remove("active"));
+        slice.classList.add("active");
 
-            if (btn.id === "heroVideoBtn") {
-                stillsLayer.classList.remove("active");
-                videoLayer.classList.add("active");
-                cafeReelVideo.play();
-                archCaption.textContent = "Live Reel (0:23) — Evening Service & Specialty Pour";
-            } else {
-                const idx = Number(btn.dataset.index);
-                cafeReelVideo.pause();
-                videoLayer.classList.remove("active");
-                stillsLayer.classList.add("active");
-                heroStills.forEach((s) => s.classList.remove("active"));
-                heroStills[idx].classList.add("active");
-                archCaption.textContent = heroCaptions[idx];
-            }
+        // Keep video playing when active, pause when collapsed to save battery
+        const hasVideo = slice.querySelector("video");
+        if (hasVideo && cafeReelVideo) {
+            cafeReelVideo.play().catch(() => {});
+        } else if (cafeReelVideo) {
+            cafeReelVideo.pause();
+        }
+    }
+
+    deckSlices.forEach((slice) => {
+        // Desktop: Smooth expand on hover
+        slice.addEventListener("mouseenter", () => {
+            if (window.innerWidth > 768) activateSlice(slice);
         });
+        // Mobile, Tablet & Desktop: Expand on tap/click
+        slice.addEventListener("click", () => activateSlice(slice));
     });
 
+    // Optional Mute/Unmute Pill inside the Video Slice
+    if (videoSoundBtn && cafeReelVideo) {
+        videoSoundBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            cafeReelVideo.muted = !cafeReelVideo.muted;
+            videoSoundBtn.textContent = cafeReelVideo.muted ? "Muted" : "Sound On";
+        });
+    }
     // =========================================================================
     // 5. 19-ITEM INTERACTIVE MENU + "AMDAVADI HONESTY MODE" MEME TRANSLATOR
     // =========================================================================
@@ -254,41 +410,121 @@ document.addEventListener("DOMContentLoaded", () => {
         renderMenu(activeCategory);
     });
 
+   // =========================================================================
+    // 6. SCULPTURAL ATELIER: MORPHING ALCOVE CUTOUT + 2700K COVE LIGHT DIMMER
     // =========================================================================
-    // 6. GALLERY HOTSPOT PINS & FULLSCREEN LIGHTBOX
-    // =========================================================================
-    const pinTooltip = document.getElementById("pinTooltip");
-    document.querySelectorAll(".arch-pin").forEach((pin) => {
-        pin.addEventListener("mouseenter", (e) => {
-            e.stopPropagation();
-            pinTooltip.textContent = pin.dataset.tip;
+    const atelier = document.getElementById("sculpturalAtelier");
+    const specimenRows = Array.from(document.querySelectorAll(".specimen-row"));
+    const filmThumbs = Array.from(document.querySelectorAll(".film-thumb"));
+    const carvedWindowWell = document.getElementById("carvedWindowWell");
+    const alcoveMainImg = document.getElementById("alcoveMainImg");
+    const alcoveCode = document.getElementById("alcoveCode");
+    const alcoveMaterialText = document.getElementById("alcoveMaterialText");
+    const alcoveSwatchDot = document.getElementById("alcoveSwatchDot");
+    const alcoveTitle = document.getElementById("alcoveTitle");
+    const alcoveNote = document.getElementById("alcoveNote");
+    const coveLightSlider = document.getElementById("coveLightSlider");
+    const kelvinReadout = document.getElementById("kelvinReadout");
+
+    let currentSpecIdx = 0;
+
+    function selectSpecimen(index) {
+        if (!specimenRows.length) return;
+        currentSpecIdx = (index + specimenRows.length) % specimenRows.length;
+        const row = specimenRows[currentSpecIdx];
+
+        specimenRows.forEach((r, i) => r.classList.toggle("active", i === currentSpecIdx));
+        filmThumbs.forEach((t, i) => t.classList.toggle("active", i === currentSpecIdx));
+
+        // Morph the carved plaster cutout silhouette organically
+        if (carvedWindowWell && row.dataset.shape) {
+            carvedWindowWell.style.borderRadius = row.dataset.shape;
+        }
+
+        // Cross-fade the local folder photo with fallback protection
+        if (alcoveMainImg) {
+            alcoveMainImg.style.opacity = "0.25";
+            setTimeout(() => {
+                alcoveMainImg.onerror = () => {
+                    if (row.dataset.fallback) alcoveMainImg.src = row.dataset.fallback;
+                };
+                alcoveMainImg.src = row.dataset.src;
+                alcoveMainImg.style.opacity = "1";
+            }, 140);
+        }
+
+        if (alcoveCode) alcoveCode.textContent = row.dataset.code;
+        if (alcoveMaterialText) alcoveMaterialText.textContent = row.dataset.material;
+        if (alcoveSwatchDot) alcoveSwatchDot.style.background = row.dataset.swatch;
+        if (alcoveTitle) alcoveTitle.textContent = row.dataset.title;
+        if (alcoveNote) alcoveNote.textContent = row.dataset.note;
+    }
+
+    specimenRows.forEach((row, idx) => {
+        row.addEventListener("mouseenter", () => {
+            if (window.innerWidth > 960) selectSpecimen(idx);
         });
-        pin.addEventListener("click", (e) => {
-            e.stopPropagation();
-            pinTooltip.textContent = pin.dataset.tip;
-        });
+        row.addEventListener("click", () => selectSpecimen(idx));
     });
 
+    filmThumbs.forEach((thumb, idx) => {
+        thumb.addEventListener("click", () => selectSpecimen(idx));
+    });
+
+    document.getElementById("prevSpecimen")?.addEventListener("click", () => {
+        selectSpecimen(currentSpecIdx - 1);
+    });
+    document.getElementById("nextSpecimen")?.addEventListener("click", () => {
+        selectSpecimen(currentSpecIdx + 1);
+    });
+
+    // Interactive 2700K Cove Light Dimmer Slider
+    if (coveLightSlider && atelier) {
+        coveLightSlider.addEventListener("input", (e) => {
+            const val = Number(e.target.value);
+            const alpha = (val / 100).toFixed(2);
+            atelier.style.setProperty("--cove-alpha", alpha);
+            if (kelvinReadout) {
+                kelvinReadout.textContent = `2700K · ${val}%`;
+            }
+            if (alcoveMainImg) {
+                alcoveMainImg.style.filter = `brightness(${0.8 + (val / 100) * 0.25})`;
+            }
+        });
+    }
+
+    // Subtle 3D Sculptural Parallax on the Carved Window Well
+    if (carvedWindowWell) {
+        carvedWindowWell.addEventListener("mousemove", (e) => {
+            const rect = carvedWindowWell.getBoundingClientRect();
+            const rotY = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
+            const rotX = ((e.clientY - rect.top) / rect.height - 0.5) * -8;
+            carvedWindowWell.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        });
+        carvedWindowWell.addEventListener("mouseleave", () => {
+            carvedWindowWell.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg)";
+        });
+    }
+
+    // Fullscreen Lightbox Trigger when clicking the Carved Alcove Window
     const lightboxModal = document.getElementById("lightboxModal");
     const lightboxImage = document.getElementById("lightboxImage");
     const lightboxCaption = document.getElementById("lightboxCaption");
 
-    document.querySelectorAll(".arch-card").forEach((card) => {
-        card.addEventListener("click", () => {
-            const imgEl = card.querySelector("img");
-            lightboxImage.src = imgEl.src;
-            lightboxCaption.textContent = card.dataset.caption || "";
-            lightboxModal.classList.add("open");
-        });
-    });
+    function openAlcoveLightbox() {
+        if (!lightboxModal || !alcoveMainImg) return;
+        lightboxImage.src = alcoveMainImg.src;
+        lightboxCaption.textContent = `${alcoveCode?.textContent || ""} — ${alcoveTitle?.textContent || ""}: ${alcoveNote?.textContent || ""}`;
+        lightboxModal.classList.add("open");
+    }
 
-    document.getElementById("lightboxClose").addEventListener("click", () => {
+    carvedWindowWell?.addEventListener("click", openAlcoveLightbox);
+    document.getElementById("lightboxClose")?.addEventListener("click", () => {
         lightboxModal.classList.remove("open");
     });
-    lightboxModal.addEventListener("click", (e) => {
+    lightboxModal?.addEventListener("click", (e) => {
         if (e.target === lightboxModal) lightboxModal.classList.remove("open");
     });
-
     // =========================================================================
     // 7. STORY CHAPTER TABS & RESERVATION LIVE BILL ESTIMATOR
     // =========================================================================
@@ -364,4 +600,33 @@ document.addEventListener("DOMContentLoaded", () => {
             ease: "power2.out"
         });
     });
+
+    // =========================================================================
+    // SCULPTED STONE LOGO: 3D TILT & INTERACTIVE LED HALO LIGHT TRACKING
+    // =========================================================================
+    const komoStoneLogo = document.getElementById("komoStoneLogo");
+    const stoneBoulder = komoStoneLogo?.querySelector(".stone-boulder");
+
+    if (komoStoneLogo && stoneBoulder) {
+        komoStoneLogo.addEventListener("mousemove", (e) => {
+            const rect = stoneBoulder.getBoundingClientRect();
+            const relX = ((e.clientX - rect.left) / rect.width) * 100;
+            const relY = ((e.clientY - rect.top) / rect.height) * 100;
+
+            // Shift the internal 2700K backlight glow toward the cursor
+            stoneBoulder.style.setProperty("--halo-x", `${relX.toFixed(1)}%`);
+            stoneBoulder.style.setProperty("--halo-y", `${relY.toFixed(1)}%`);
+
+            // Subtle 3D sculptural tilt
+            const tiltY = ((e.clientX - rect.left) / rect.width - 0.5) * 14;
+            const tiltX = ((e.clientY - rect.top) / rect.height - 0.5) * -14;
+            stoneBoulder.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03)`;
+        });
+
+        komoStoneLogo.addEventListener("mouseleave", () => {
+            stoneBoulder.style.setProperty("--halo-x", "50%");
+            stoneBoulder.style.setProperty("--halo-y", "50%");
+            stoneBoulder.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+        });
+    }
 });

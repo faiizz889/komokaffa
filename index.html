@@ -7,6 +7,8 @@
     <!-- Editorial Serif (Instrument Serif) + Clean Grotesque Sans (Inter) + Mono for Specs -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Add this inside <head> for the exact chiseled KOMO serif proportions -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -20,19 +22,44 @@
         <span class="cursor-text" id="cursorText"></span>
     </div>
 
+   <!-- =================================================================
+         SENIOR ARCHITECT NAVBAR (ZERO-GLITCH PILL + ESPRESSO FILL LOGO)
+         ================================================================= -->
+    <!-- SVG Filter for Authentic Rough-Chiseled Stone Texture (Hidden, 0x0) -->
+    <svg width="0" height="0" style="position:absolute; pointer-events:none;" aria-hidden="true">
+        <defs>
+            <filter id="komoStoneRelief" x="-10%" y="-10%" width="120%" height="120%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.065" numOctaves="4" seed="8" result="noise"/>
+                <feDiffuseLighting in="noise" lighting-color="#d8c3a5" surfaceScale="2.2" result="stoneLight">
+                    <feDistantLight azimuth="135" elevation="50"/>
+                </feDiffuseLighting>
+                <feComposite in="stoneLight" in2="SourceGraphic" operator="in"/>
+            </filter>
+        </defs>
+    </svg>
+
     <!-- =================================================================
-         FLOATING ARCHITECTURAL NAVBAR (WITH WORKING SLIDING PILL SYNC)
+         SCULPTED STONE MONOLITH NAVBAR (INSPIRED BY REAL KOMO WALL SIGN)
          ================================================================= -->
     <header class="site-header" id="siteHeader">
         <div class="header-inner">
-            <a href="#home" class="brand-mark" data-cursor="Top">
-                <span class="brand-komo">KOMO</span>
-                <span class="brand-kaffa">BY KAFFA</span>
+            <!-- Sculpted Backlit Stone Boulder Logo -->
+            <a href="#home" class="komo-stone-logo" id="komoStoneLogo" data-cursor="Home" aria-label="KOMO by Kaffa Home">
+                <div class="stone-boulder">
+                    <!-- Rough Stone Grain Layer -->
+                    <span class="stone-crag-texture" aria-hidden="true"></span>
+                    <!-- Recessed Cavity with Warm 2700K Backlight -->
+                    <div class="stone-recess-cavity">
+                        <span class="cavity-halo" id="cavityHalo" aria-hidden="true"></span>
+                        <span class="komo-metal-letters" data-text="KOMO">KOMO</span>
+                    </div>
+                </div>
+                <span class="kaffa-side-tag">BY KAFFA</span>
             </a>
 
-            <!-- Segmented Track with Real-Time Sliding Pill -->
-            <nav class="nav-track" id="navTrack" aria-label="Main Navigation">
-                <span class="nav-Highlight-pill" id="navPill"></span>
+            <!-- Segmented Track with Zero-Glitch Sliding Pill -->
+            <nav class="nav-track" id="navTrack" aria-label="Primary Navigation">
+                <span class="nav-highlight-pill" id="navPill" aria-hidden="true"></span>
                 <a href="#home" class="nav-link active" data-section="home">Experience</a>
                 <a href="#menu" class="nav-link" data-section="menu">Menu</a>
                 <a href="#gallery" class="nav-link" data-section="gallery">Spaces</a>
@@ -40,126 +67,163 @@
                 <a href="#contact" class="nav-link" data-section="contact">Reserve</a>
             </nav>
 
+            <!-- Right Actions: Live Ahmedabad Status + CTA + Mobile Trigger -->
             <div class="header-meta">
                 <div class="live-clock-chip" title="Rajpath Rangoli Rd, Bodakdev">
-                    <span class="status-dot"></span>
+                    <span class="status-dot" id="storeStatusDot"></span>
                     <span id="amdavadClock">AMD · Open til 1 AM</span>
                 </div>
-                <a href="#contact" class="btn-header magnetic" data-cursor="Table">Book Table</a>
-                <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu" aria-expanded="false">
-                    <span></span>
-                    <span></span>
+
+                <a href="#contact" class="btn-header magnetic" data-cursor="Reserve">
+                    <span class="btn-header-text">Book Table</span>
+                    <span class="btn-header-dot"></span>
+                </a>
+
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle Navigation" aria-expanded="false">
+                    <span class="bar-top"></span>
+                    <span class="bar-bottom"></span>
                 </button>
             </div>
+
+            <!-- 1px Scroll Progress Hairline -->
+            <div class="nav-scroll-progress" id="navScrollProgress" aria-hidden="true"></div>
         </div>
     </header>
 
-    <!-- Mobile & Tablet Slide-Down Architectural Drawer -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-inner">
+    <!-- Tactile Architectural Mobile & Tablet Drawer -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="mobile-menu-backdrop" id="mobileBackdrop"></div>
+        <div class="mobile-menu-sheet">
             <div class="mobile-menu-top">
-                <span class="mono-label">NAVIGATION INDEX — BODAKDEV, AHMEDABAD</span>
+                <span class="mono-label">NAVIGATION INDEX — BODAKDEV</span>
+                <span class="mono-label" id="mobileTimeDisplay">CLOSES 01:00 AM</span>
             </div>
-            <nav class="mobile-links">
-                <a href="#home" class="m-nav-link" data-section="home"><span>01</span> The Experience</a>
-                <a href="#menu" class="m-nav-link" data-section="menu"><span>02</span> Culinary Index</a>
-                <a href="#gallery" class="m-nav-link" data-section="gallery"><span>03</span> Cave Architecture</a>
-                <a href="#about" class="m-nav-link" data-section="about"><span>04</span> Our Story & Meme Lore</a>
-                <a href="#contact" class="m-nav-link" data-section="contact"><span>05</span> Reserve a Table</a>
+
+            <nav class="mobile-links" aria-label="Mobile Navigation">
+                <a href="#home" class="m-nav-link active" data-section="home">
+                    <span class="m-idx">01</span>
+                    <span class="m-title">The Experience</span>
+                    <span class="m-arrow">↗</span>
+                </a>
+                <a href="#menu" class="m-nav-link" data-section="menu">
+                    <span class="m-idx">02</span>
+                    <span class="m-title">Culinary Index</span>
+                    <span class="m-arrow">↗</span>
+                </a>
+                <a href="#gallery" class="m-nav-link" data-section="gallery">
+                    <span class="m-idx">03</span>
+                    <span class="m-title">Cave Architecture</span>
+                    <span class="m-arrow">↗</span>
+                </a>
+                <a href="#about" class="m-nav-link" data-section="about">
+                    <span class="m-idx">04</span>
+                    <span class="m-title">Our Story & Lore</span>
+                    <span class="m-arrow">↗</span>
+                </a>
+                <a href="#contact" class="m-nav-link" data-section="contact">
+                    <span class="m-idx">05</span>
+                    <span class="m-title">Reserve a Table</span>
+                    <span class="m-arrow">↗</span>
+                </a>
             </nav>
+
             <div class="mobile-menu-foot">
-                <p>Rajpath Rangoli Rd, behind Rajpath Club, Bodakdev, Ahmedabad 380059</p>
-                <a href="tel:09925076666">Call Direct: 099250 76666</a>
+                <div class="m-foot-col">
+                    <span class="mono-label">LOCATION</span>
+                    <p>Behind Rajpath Club, Bodakdev, Ahmedabad</p>
+                </div>
+                <a href="tel:09925076666" class="m-call-pill">Call 099250 76666</a>
             </div>
         </div>
     </div>
-
     <main>
-        <!-- =================================================================
-             SECTION 1: HERO (ARCHITECTURAL EDITORIAL + CAVE ARCH VIEWPORT)
-             ================================================================= -->
-        <section id="home" class="page-section hero-section" data-nav="home">
-            <div class="container">
-                <!-- Top Architectural Spec Bar -->
-                <div class="arch-spec-bar reveal-item">
-                    <span>23.0338° N, 72.5065° E — BODAKDEV</span>
-                    <span class="spec-divider">/</span>
-                    <span>RATED 4.2 ★ (1,389 GOOGLE REVIEWS)</span>
-                    <span class="spec-divider">/</span>
-                    <span>₹800–1,800 PER PERSON</span>
-                </div>
+       <!-- =================================================================
+     SECTION 1: HERO (MINIMAL EDITORIAL + KINETIC ACCORDION DECK)
+     ================================================================= -->
+<section id="home" class="page-section hero-section" data-nav="home">
+    <div class="container">
+    
 
-                <div class="hero-main-grid">
-                    <!-- Left Column: Human Editorial Typography -->
-                    <div class="hero-editorial">
-                        <h1 class="hero-display reveal-item">
-                            Carved from earth.<br>
-                            <em>Built for Ahmedabad’s<br>late-night conversations.</em>
-                        </h1>
+        <!-- Out-of-the-Box Visual Stage: 5-Slice Kinetic Accordion Deck -->
+        <div class="hero-kinetic-deck reveal-item" id="heroKineticDeck">
 
-                        <p class="hero-body reveal-item">
-                            Tucked behind Rajpath Club, <strong>KOMO by KAFFA</strong> pairs hand-troweled earthen cave vaults and warm recessed cove lighting with wood-fired Neapolitan sourdough pizzas, truffle dimsum, and specialty roasts until 1:00 AM.
-                        </p>
-
-                        <div class="hero-cta-row reveal-item">
-                            <a href="#contact" class="btn-solid magnetic" data-cursor="Reserve">
-                                <span>Book a Table</span>
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                            </a>
-                            <a href="#menu" class="btn-ghost magnetic" data-cursor="19 Dishes">
-                                <span>Explore 19 Signatures</span>
-                            </a>
+            <!-- Slice 01: Live Video Reel (Default Expanded) -->
+            <article class="deck-slice active" data-cursor="Live Reel">
+                <video id="cafeReelVideo" class="slice-media" autoplay muted loop playsinline preload="auto" poster="komologo2.webp">
+                    <source src="Video-24060.mp4" type="video/mp4">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-waiter-serving-coffee-in-a-restaurant-41695-large.mp4" type="video/mp4">
+                </video>
+                <div class="slice-overlay">
+                    <span class="slice-num">01 / LIVE REEL</span>
+                    <div class="slice-info">
+                        <div>
+                            <h3>The Midnight Sanctuary</h3>
+                            <p>Wood-fired Italian sourdough, truffle dimsum & Kaffa specialty coffee.</p>
                         </div>
-
-                        <!-- Authentic Guest Note + Subtle Amdavadi Wit -->
-                        <div class="hero-footnote reveal-item">
-                            <div class="footnote-col">
-                                <span class="mono-label">VERIFIED GUEST CONSENSUS</span>
-                                <p>“Food: 5/5 · Atmosphere: 5/5 · Service: 5/5. We ordered pizza and Thai curry, and both were absolutely delicious.”</p>
-                            </div>
-                            <div class="footnote-col border-left">
-                                <span class="mono-label">LOCAL REALITY CHECK</span>
-                                <p>When SG Highway feels like a parking lot, our cave arches behind Rajpath Club feel like a Mediterranean holiday.</p>
-                            </div>
-                        </div>
+                        <button type="button" class="sound-pill" id="videoSoundBtn" aria-label="Toggle Mute">Muted</button>
                     </div>
+                </div>
+            </article>
 
-                    <!-- Right Column: Sculpted Cave Window with Interactive Media Switcher -->
-                    <div class="hero-media-column reveal-item">
-                        <div class="cave-arch-frame" id="heroFrame">
-                            <!-- Layer 1:Actual Interior Stills (Default so your real cafe photos shine immediately) -->
-                            <div class="media-layer active" id="stillsLayer">
-                                <img src="komologo2.webp" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Cave Arches and Cove Lighting" class="hero-still active">
-                                <img src="komo3.webp" onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Communal Table and Pottery Wall" class="hero-still">
-                                <img src="komo2.webp" onerror="this.src='https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Embossed Tree Branch Wall" class="hero-still">
-                                <img src="kom01.webp" onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Exterior Monolith Signage" class="hero-still">
-                            </div>
-
-                           <!-- Layer 2: Ambient Cafe Video Reel -->
-<div class="media-layer" id="videoLayer">
-    <video id="cafeReelVideo" muted loop playsinline preload="auto">
-        <!-- Point to your local video file -->
-        <source src="Video-24060.mp4" type="video/mp4">
-        Your browser does not support HTML5 video.
-    </video>
-</div>
-
-                            <!-- Tactile Bottom Control Dock inside Arch -->
-                            <div class="arch-control-bar">
-                                <div class="arch-thumbs" role="tablist" aria-label="Switch Hero View">
-                                    <button class="thumb-btn active" data-index="0" data-cursor="Vaults">01 Vaults</button>
-                                    <button class="thumb-btn" data-index="1" data-cursor="Pottery">02 Table</button>
-                                    <button class="thumb-btn" data-index="2" data-cursor="Relief">03 Relief</button>
-                                    <button class="thumb-btn" data-index="3" data-cursor="Facade">04 Sign</button>
-                                    <button class="thumb-btn video-toggle-btn" id="heroVideoBtn" data-cursor="Play">▶ 0:23 Reel</button>
-                                </div>
-                                <span class="arch-caption" id="archCaption">Fig 01. Undulating Stucco Ceiling & Recessed Cove Light</span>
-                            </div>
+            <!-- Slice 02: Cave Vaults (komologo2.webp) -->
+            <article class="deck-slice" data-cursor="Expand">
+                <img src="komologo2.webp" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Cave Vaults" class="slice-media">
+                <div class="slice-overlay">
+                    <span class="slice-num">02 / VAULTS</span>
+                    <div class="slice-info">
+                        <div>
+                            <h3>Sculpted Stucco Ceilings</h3>
+                            <p>Warm 2700K recessed cove contours behind Rajpath Club.</p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </article>
+
+            <!-- Slice 03: Communal Table & Pottery (komo3.webp) -->
+            <article class="deck-slice" data-cursor="Expand">
+                <img src="komo3.webp" onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Communal Table" class="slice-media">
+                <div class="slice-overlay">
+                    <span class="slice-num">03 / ALCOVE</span>
+                    <div class="slice-info">
+                        <div>
+                            <h3>16-Seater Timber Table</h3>
+                            <p>Framed by backlit terracotta pottery shelves and organic cutouts.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Slice 04: Embossed Tree Relief (komo2.webp) -->
+            <article class="deck-slice" data-cursor="Expand">
+                <img src="komo2.webp" onerror="this.src='https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Embossed Wall" class="slice-media">
+                <div class="slice-overlay">
+                    <span class="slice-num">04 / RELIEF</span>
+                    <div class="slice-info">
+                        <div>
+                            <h3>Botanical Plaster Art</h3>
+                            <p>Hand-embossed tree canopies above mirror-chrome KOMO signage.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Slice 05: Exterior Monolith (kom01.webp) -->
+            <article class="deck-slice" data-cursor="Expand">
+                <img src="kom01.webp" onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Exterior Monolith" class="slice-media">
+                <div class="slice-overlay">
+                    <span class="slice-num">05 / FACADE</span>
+                    <div class="slice-info">
+                        <div>
+                            <h3>Earthen Monolith</h3>
+                            <p>Rajpath Rangoli Road’s calmest escape from SG Highway traffic.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </div>
+</section>
 
         <!-- =================================================================
              SECTION 2: MENU (COMPACT INTERACTIVE INDEX + AMDAVADI MODE SWITCH)
@@ -225,69 +289,192 @@
             </div>
         </section>
 
-        <!-- =================================================================
-             SECTION 3: SPACES / GALLERY (ACTUAL PHOTOS + INTERACTIVE HOTSPOTS)
+       <!-- =================================================================
+             SECTION 3: SCULPTURAL ATELIER (DELICATE CARVED ALCOVES & SWATCHES)
              ================================================================= -->
         <section id="gallery" class="page-section gallery-section" data-nav="gallery">
             <div class="container">
+                <!-- Header Row with Interactive Cove-Light Ambience Slider -->
                 <div class="section-header-row reveal-item">
                     <div>
-                        <span class="mono-label">03 / THE AESTHETICS & ARCHITECTURE</span>
-                        <h2 class="section-heading">Inside the Earthen Sanctuary</h2>
+                        <span class="mono-label">03 / ARCHITECTURAL SPECIMENS & RELIEFS</span>
+                        <h2 class="section-heading">Sculpted in Earth & Warm Light</h2>
                     </div>
-                    <p class="header-aside-note">
-                        Click any architectural frame to expand in full resolution, or hover the interactive pins on Frame 01 to inspect the interior materials.
-                    </p>
+
+                    <!-- Out-of-the-Box Interactive 2700K Cove Light Dimmer -->
+                    <div class="cove-dimmer-widget" title="Drag to adjust the recessed 2700K cove light intensity">
+                        <div class="dimmer-labels">
+                            <span class="mono-label">COVE LIGHT INTENSITY</span>
+                            <span class="mono-label" id="kelvinReadout">2700K · 75%</span>
+                        </div>
+                        <input type="range" id="coveLightSlider" min="15" max="100" value="75" aria-label="Adjust Cove Lighting">
+                    </div>
                 </div>
 
-                <!-- Architectural Bento Grid Using Your 4 Real KOMO Photos -->
-                <div class="arch-bento-grid reveal-item">
-                    <!-- Frame 01: Main Cave Ceiling with Interactive Material Pins -->
-                    <figure class="arch-card span-2-col span-2-row" data-img="unnamed (1).webp" data-fallback="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=85&w=1400" data-caption="01 / Main Dining Vault — Undulating cave ceiling with recessed 2700K warm LED cove contours.">
-                        <img src="unnamed (1).webp" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Main Cave Ceiling">
-                        
-                        <!-- Interactive Architectural Pins -->
-                        <div class="arch-pin" style="top: 26%; left: 58%;" data-tip="Recessed 2700K Cove Light — Zero harsh glare, 100% flattering Instagram lighting.">
-                            <span class="pin-plus">+</span>
+                <!-- Out-of-the-Box Split Atelier: Left Tactile Specimen Index + Right Carved Plaster Alcove Stage -->
+                <div class="sculptural-atelier reveal-item" id="sculpturalAtelier">
+
+                    <!-- Left Column: Delicate Architectural Index & Tactile Material Swatches -->
+                    <div class="specimen-index-col">
+                        <div class="specimen-list" role="tablist" aria-label="Architectural Specimens">
+
+                            <!-- Specimen 01: Cave Vaults (komologo2.webp) -->
+                            <button type="button" class="specimen-row active"
+                                data-src="komologo2.webp"
+                                data-fallback="unnamed (1).webp"
+                                data-code="ARC — 01"
+                                data-title="Undulating Cave Vaults"
+                                data-material="Hand-Troweled Lime Stucco & 2700K LED Cove"
+                                data-note="Zero straight lines. Acoustic lime plaster curves overhead to absorb dining echo while bathing tables in warm golden light."
+                                data-shape="44% 56% 48% 52% / 58% 42% 58% 42%"
+                                data-swatch="#D9CBB8">
+                                <span class="spec-num">01</span>
+                                <div class="spec-meta">
+                                    <h4>Undulating Cave Vaults</h4>
+                                    <span>Lime Stucco · Recessed Cove Contours</span>
+                                </div>
+                                <span class="spec-swatch" style="background: #D9CBB8;"></span>
+                            </button>
+
+                            <!-- Specimen 02: Pottery Alcove & Timber Table (komo3.webp) -->
+                            <button type="button" class="specimen-row"
+                                data-src="komo3.webp"
+                                data-fallback="unnamed.webp"
+                                data-code="ARC — 02"
+                                data-title="Pottery Niche & 16-Seater Table"
+                                data-material="Kiln-Fired Terracotta & Solid Teak Timber"
+                                data-note="Over 40 handcrafted earthen vessels sit inside a carved wall niche overlooking our grand communal wooden table."
+                                data-shape="56% 44% 42% 58% / 46% 54% 46% 54%"
+                                data-swatch="#B87A56">
+                                <span class="spec-num">02</span>
+                                <div class="spec-meta">
+                                    <h4>Illuminated Pottery Alcove</h4>
+                                    <span>Terracotta Vessels · 16-Seater Timber</span>
+                                </div>
+                                <span class="spec-swatch" style="background: #B87A56;"></span>
+                            </button>
+
+                            <!-- Specimen 03: Embossed Tree Branch Relief (komo2.webp) -->
+                            <button type="button" class="specimen-row"
+                                data-src="komo2.webp"
+                                data-fallback="unnamed (2).webp"
+                                data-code="ARC — 03"
+                                data-title="Embossed Botanical Relief"
+                                data-material="Bas-Relief Clay Plaster & Mirror Chrome"
+                                data-note="Sculpted directly into wet wall plaster by artisans, organic tree canopies arch over backlit metallic KOMO lettering."
+                                data-shape="48% 52% 57% 43% / 52% 48% 52% 48%"
+                                data-swatch="#A68B6A">
+                                <span class="spec-num">03</span>
+                                <div class="spec-meta">
+                                    <h4>Botanical Plaster Relief</h4>
+                                    <span>Hand-Carved Foliage · Backlit Signage</span>
+                                </div>
+                                <span class="spec-swatch" style="background: #A68B6A;"></span>
+                            </button>
+
+                            <!-- Specimen 04: Carved Stone Monolith (image_63ffb2.jpg) -->
+                            <button type="button" class="specimen-row"
+                                data-src="gallery1.webp"
+                                data-fallback="gallery1.webp"
+                                data-code="ARC — 04"
+                                data-title="Chiseled Stone Sign Monolith"
+                                data-material="Rough-Hewn Sandstone & Halo-Lit Bronze"
+                                data-note="Our signature wall sculpture—raw chiseled stone housing recessed bronze KOMO typography with a soft radial halo."
+                                data-shape="42% 58% 47% 53% / 54% 46% 54% 46%"
+                                data-swatch="#786049">
+                                <span class="spec-num">04</span>
+                                <div class="spec-meta">
+                                    <h4>Chiseled Stone Monolith</h4>
+                                    <span>Raw Sandstone · Halo-Lit Bronze</span>
+                                </div>
+                                <span class="spec-swatch" style="background: #786049;"></span>
+                            </button>
+
+                            <!-- Specimen 05: Daylight Exterior Facade (kom01.webp) -->
+                            <button type="button" class="specimen-row"
+                                data-src="kom01.webp"
+                                data-fallback="unnamed (3).webp"
+                                data-code="ARC — 05"
+                                data-title="Daylight Earthen Facade"
+                                data-material="Sun-Baked Sand Stucco & Botanical Relief"
+                                data-note="Set back from Rajpath Rangoli Road, the monolithic sandstone exterior filters out city noise the moment you arrive."
+                                data-shape="53% 47% 45% 55% / 49% 51% 49% 51%"
+                                data-swatch="#9C8468">
+                                <span class="spec-num">05</span>
+                                <div class="spec-meta">
+                                    <h4>Daylight Earthen Facade</h4>
+                                    <span>Exterior Stucco · Bodakdev Sanctuary</span>
+                                </div>
+                                <span class="spec-swatch" style="background: #9C8468;"></span>
+                            </button>
+
                         </div>
-                        <div class="arch-pin" style="top: 62%; left: 22%;" data-tip="Hand-Troweled Stucco — Absorbs room echo so you can actually hear your friends.">
-                            <span class="pin-plus">+</span>
+
+                        <!-- Delicate Bottom Filmstrip of All 5 Folder Photos -->
+                        <div class="folder-filmstrip" aria-label="Quick Thumbnail Strip">
+                            <button type="button" class="film-thumb active" data-idx="0" title="komologo2.webp">
+                                <img src="komologo2.webp" onerror="this.src='unnamed (1).webp'" alt="Thumb 1">
+                            </button>
+                            <button type="button" class="film-thumb" data-idx="1" title="komo3.webp">
+                                <img src="komo3.webp" onerror="this.src='unnamed.webp'" alt="Thumb 2">
+                            </button>
+                            <button type="button" class="film-thumb" data-idx="2" title="komo2.webp">
+                                <img src="komo2.webp" onerror="this.src='unnamed (2).webp'" alt="Thumb 3">
+                            </button>
+                            <button type="button" class="film-thumb" data-idx="3" title="image_63ffb2.jpg">
+                                <img src="image_63ffb2.jpg" onerror="this.src='unnamed (3).webp'" alt="Thumb 4">
+                            </button>
+                            <button type="button" class="film-thumb" data-idx="4" title="kom01.webp">
+                                <img src="kom01.webp" onerror="this.src='unnamed (3).webp'" alt="Thumb 5">
+                            </button>
                         </div>
+                    </div>
 
-                        <div class="pin-tooltip" id="pinTooltip">Hover a (+) pin to inspect architectural details</div>
+                    <!-- Right Column: Delicate Sculpted Plaster Window Stage (No Giant Boxy Photos) -->
+                    <div class="alcove-stage-col">
+                        <div class="plaster-wall-tablet" id="plasterWallTablet">
+                            <!-- Top Engraved Architectural Spec Stamp -->
+                            <div class="tablet-top-stamp">
+                                <span class="mono-label" id="alcoveCode">ARC — 01</span>
+                                <span class="material-chip" id="alcoveMaterialChip">
+                                    <i class="chip-dot" id="alcoveSwatchDot"></i>
+                                    <span id="alcoveMaterialText">Hand-Troweled Lime Stucco & 2700K LED Cove</span>
+                                </span>
+                            </div>
 
-                        <figcaption class="arch-caption-bar">
-                            <span>01 / CAVE VAULTS & COVE LIGHT</span>
-                            <span>EXPAND ↗</span>
-                        </figcaption>
-                    </figure>
+                            <!-- Recessed Organic Cave Cutout Window -->
+                            <div class="carved-window-well" id="carvedWindowWell" data-cursor="Expand">
+                                <!-- Warm 2700K Cove Rim Glow Controlled by Slider & Cursor -->
+                                <div class="window-cove-halo" id="windowCoveHalo"></div>
 
-                    <!-- Frame 02: Long Communal Table & Pottery Wall -->
-                    <figure class="arch-card span-2-col" data-img="unnamed.webp" data-fallback="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=85&w=1200" data-caption="02 / The Communal Sanctuary — 16-seater timber table flanked by organic window cutouts and backlit terracotta pottery.">
-                        <img src="unnamed.webp" onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=85&w=1200'" alt="KOMO Communal Table and Pottery Wall">
-                        <figcaption class="arch-caption-bar">
-                            <span>02 / POTTERY ALCOVE & 16-SEATER TIMBER TABLE</span>
-                            <span>EXPAND ↗</span>
-                        </figcaption>
-                    </figure>
+                                <div class="window-photo-mask" id="windowPhotoMask">
+                                    <img id="alcoveMainImg"
+                                         src="komologo2.webp"
+                                         onerror="this.src='unnamed (1).webp'"
+                                         alt="KOMO Architectural Specimen">
+                                </div>
 
-                    <!-- Frame 03: Embossed Tree Branch Wall Art -->
-                    <figure class="arch-card" data-img="unnamed (2).webp" data-fallback="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=85&w=900" data-caption="03 / Botanical Stucco Relief — Sculpted tree branches framing backlit mirror-polished KOMO signage.">
-                        <img src="unnamed (2).webp" onerror="this.src='https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=85&w=900'" alt="KOMO Embossed Wall Relief">
-                        <figcaption class="arch-caption-bar">
-                            <span>03 / EMBOSSED TREE RELIEF</span>
-                            <span>EXPAND ↗</span>
-                        </figcaption>
-                    </figure>
+                                <button type="button" class="window-expand-pill" id="alcoveExpandBtn" aria-label="View Full Resolution">
+                                    <span>Inspect Full Frame ↗</span>
+                                </button>
+                            </div>
 
-                    <!-- Frame 04: Exterior Sign Monolith -->
-                    <figure class="arch-card" data-img="unnamed (3).webp" data-fallback="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=85&w=900" data-caption="04 / Daylight Earth Monolith — Textured sand-plaster exterior wall in Bodakdev.">
-                        <img src="unnamed (3).webp" onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=85&w=900'" alt="KOMO Exterior Sign">
-                        <figcaption class="arch-caption-bar">
-                            <span>04 / EXTERIOR MONOLITH</span>
-                            <span>EXPAND ↗</span>
-                        </figcaption>
-                    </figure>
+                            <!-- Bottom Sculptural Caption & Architectural Note -->
+                            <div class="tablet-foot-note">
+                                <div class="tablet-title-row">
+                                    <h3 id="alcoveTitle">Undulating Cave Vaults</h3>
+                                    <div class="alcove-step-btns">
+                                        <button type="button" class="step-arrow" id="prevSpecimen" aria-label="Previous Specimen">←</button>
+                                        <button type="button" class="step-arrow" id="nextSpecimen" aria-label="Next Specimen">→</button>
+                                    </div>
+                                </div>
+                                <p id="alcoveNote">
+                                    Zero straight lines. Acoustic lime plaster curves overhead to absorb dining echo while bathing tables in warm golden light.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
