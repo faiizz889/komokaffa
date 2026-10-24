@@ -3,43 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOMO by KAFFA | Modern Organic Cafe & Italian Bistro</title>
-    <!-- Google Fonts: Cormorant Garamond (Metallic Serif feel) & Plus Jakarta Sans -->
+    <title>KOMO by KAFFA — Cafe & Italian Bistro, Bodakdev Ahmedabad</title>
+    <!-- Editorial Serif (Instrument Serif) + Clean Grotesque Sans (Inter) + Mono for Specs -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Stucco / Clay Tactile Noise Overlay -->
-    <div class="stucco-overlay" aria-hidden="true"></div>
+    <!-- Subtle Plaster Texture (No Glow, Pure Tactile Grain) -->
+    <div class="plaster-grain" aria-hidden="true"></div>
 
-    <!-- Custom Dual Cursor -->
-    <div class="cursor-dot"></div>
-    <div class="cursor-ring"></div>
+    <!-- Minimalist Architectural Cursor (Desktop Only) -->
+    <div class="custom-cursor" id="customCursor">
+        <span class="cursor-text" id="cursorText"></span>
+    </div>
 
-    <!-- Sticky Navigation -->
-    <header id="navbar">
-        <div class="nav-container">
-            <a href="#home" class="logo hover-target">
-                <span class="logo-main">KOMO</span>
-                <span class="logo-sub">BY KAFFA</span>
+    <!-- =================================================================
+         FLOATING ARCHITECTURAL NAVBAR (WITH WORKING SLIDING PILL SYNC)
+         ================================================================= -->
+    <header class="site-header" id="siteHeader">
+        <div class="header-inner">
+            <a href="#home" class="brand-mark" data-cursor="Top">
+                <span class="brand-komo">KOMO</span>
+                <span class="brand-kaffa">BY KAFFA</span>
             </a>
 
-            <nav class="nav-links">
-                <a href="#home" class="nav-link hover-target active">The Experience</a>
-                <a href="#menu" class="nav-link hover-target">Menu</a>
-                <a href="#gallery" class="nav-link hover-target">Aesthetics</a>
-                <a href="#about" class="nav-link hover-target">Our Story</a>
-                <a href="#contact" class="nav-link hover-target">Visit Us</a>
+            <!-- Segmented Track with Real-Time Sliding Pill -->
+            <nav class="nav-track" id="navTrack" aria-label="Main Navigation">
+                <span class="nav-Highlight-pill" id="navPill"></span>
+                <a href="#home" class="nav-link active" data-section="home">Experience</a>
+                <a href="#menu" class="nav-link" data-section="menu">Menu</a>
+                <a href="#gallery" class="nav-link" data-section="gallery">Spaces</a>
+                <a href="#about" class="nav-link" data-section="about">Story</a>
+                <a href="#contact" class="nav-link" data-section="contact">Reserve</a>
             </nav>
 
-            <div class="nav-actions">
-                <a href="#contact" class="btn btn-gold magnetic hover-target">
-                    <span class="btn-text">Book a Table</span>
-                </a>
-                <button class="hamburger hover-target" aria-label="Toggle Menu" aria-expanded="false">
+            <div class="header-meta">
+                <div class="live-clock-chip" title="Rajpath Rangoli Rd, Bodakdev">
+                    <span class="status-dot"></span>
+                    <span id="amdavadClock">AMD · Open til 1 AM</span>
+                </div>
+                <a href="#contact" class="btn-header magnetic" data-cursor="Table">Book Table</a>
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu" aria-expanded="false">
                     <span></span>
                     <span></span>
                 </button>
@@ -47,532 +54,468 @@
         </div>
     </header>
 
-    <!-- Fullscreen Mobile Navigation Drawer -->
-    <div class="mobile-drawer">
-        <div class="mobile-drawer-inner">
-            <a href="#home" class="mobile-link">01. The Experience</a>
-            <a href="#menu" class="mobile-link">02. Culinary Delights</a>
-            <a href="#gallery" class="mobile-link">03. The Aesthetics</a>
-            <a href="#about" class="mobile-link">04. Our Story</a>
-            <a href="#contact" class="mobile-link">05. Reservations</a>
-            <div class="mobile-footer">
-                <p>Rajpath Rangoli Rd, Bodakdev, Ahmedabad</p>
-                <p>Open Daily • Closes 1:00 AM • 099250 76666</p>
+    <!-- Mobile & Tablet Slide-Down Architectural Drawer -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-inner">
+            <div class="mobile-menu-top">
+                <span class="mono-label">NAVIGATION INDEX — BODAKDEV, AHMEDABAD</span>
+            </div>
+            <nav class="mobile-links">
+                <a href="#home" class="m-nav-link" data-section="home"><span>01</span> The Experience</a>
+                <a href="#menu" class="m-nav-link" data-section="menu"><span>02</span> Culinary Index</a>
+                <a href="#gallery" class="m-nav-link" data-section="gallery"><span>03</span> Cave Architecture</a>
+                <a href="#about" class="m-nav-link" data-section="about"><span>04</span> Our Story & Meme Lore</a>
+                <a href="#contact" class="m-nav-link" data-section="contact"><span>05</span> Reserve a Table</a>
+            </nav>
+            <div class="mobile-menu-foot">
+                <p>Rajpath Rangoli Rd, behind Rajpath Club, Bodakdev, Ahmedabad 380059</p>
+                <a href="tel:09925076666">Call Direct: 099250 76666</a>
             </div>
         </div>
     </div>
 
-    <!-- ==========================================
-         PAGE 1: HOME (THE EXPERIENCE)
-         ========================================== -->
-    <section id="home" class="hero-section">
-        <!-- Slow-Zooming Cinematic Slideshow -->
-        <div class="hero-slideshow">
-            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=85&w=1920');"></div>
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=85&w=1920');"></div>
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=85&w=1920');"></div>
-            <div class="hero-cove-glow"></div>
-        </div>
-
-        <div class="hero-content container">
-            <div class="hero-badge gsap-hero">
-                <span class="star">★ 4.2</span>
-                <span class="divider">•</span>
-                <span>1,389+ Reviews</span>
-                <span class="divider">•</span>
-                <span>Bodakdev, Ahmedabad</span>
-            </div>
-            <h1 class="hero-title gsap-hero">
-                An Elegantly Crafted<br>
-                <em>Culinary Escape</em>
-            </h1>
-            <p class="hero-subtitle gsap-hero">
-                Vibrant cafe and Italian bistro nestled within sculptural earthen arches, serving wood-fired pizzas, artisanal dimsum, and specialty brews until 1 AM.
-            </p>
-            <div class="hero-cta-group gsap-hero">
-                <a href="#contact" class="btn btn-primary magnetic hover-target">
-                    <span class="btn-text">Reserve Your Table</span>
-                </a>
-                <a href="#menu" class="btn btn-outline magnetic hover-target">
-                    <span class="btn-text">Explore Menu</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Organic Undulating Cave Arch SVG Divider -->
-        <div class="cave-wave-bottom" aria-hidden="true">
-            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                <path d="M0,64 C240,128 480,0 720,48 C960,96 1200,16 1440,80 L1440,120 L0,120 Z" fill="var(--bg-sand)"/>
-            </svg>
-        </div>
-    </section>
-
-    <!-- Vibe Intro & Embossed Branch Motif -->
-    <section class="vibe-section">
-        <!-- Embossed Tree Branch Motif (Inspired by KOMO Wall Art) -->
-        <svg class="embossed-branch-bg parallax-bg" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M50,380 C120,280 200,240 350,200 C420,180 490,120 550,40 M230,245 C190,190 140,160 80,140 M350,200 C400,220 460,260 520,250" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
-            <circle cx="80" cy="140" r="18" fill="currentColor" opacity="0.25"/>
-            <circle cx="550" cy="40" r="24" fill="currentColor" opacity="0.25"/>
-            <circle cx="520" cy="250" r="15" fill="currentColor" opacity="0.25"/>
-        </svg>
-
-        <div class="container">
-            <div class="vibe-grid">
-                <div class="vibe-stat-card gsap-fade-up">
-                    <span class="cove-pill">THE AMBIANCE</span>
-                    <h2>Sculpted in Earth & Warm Light</h2>
-                    <p>Step inside an organic sanctuary of undulating stucco ceilings, warm LED cove lighting, and illuminated pottery alcoves. Designed for lively conversations, late-night coffee cravings, and elevated communal dining.</p>
-                    <div class="vibe-metrics">
-                        <div>
-                            <strong>₹800–1,800</strong>
-                            <span>Per Person Average</span>
-                        </div>
-                        <div>
-                            <strong>Closes 1 AM</strong>
-                            <span>Late-Night Bistro</span>
-                        </div>
-                    </div>
+    <main>
+        <!-- =================================================================
+             SECTION 1: HERO (ARCHITECTURAL EDITORIAL + CAVE ARCH VIEWPORT)
+             ================================================================= -->
+        <section id="home" class="page-section hero-section" data-nav="home">
+            <div class="container">
+                <!-- Top Architectural Spec Bar -->
+                <div class="arch-spec-bar reveal-item">
+                    <span>23.0338° N, 72.5065° E — BODAKDEV</span>
+                    <span class="spec-divider">/</span>
+                    <span>RATED 4.2 ★ (1,389 GOOGLE REVIEWS)</span>
+                    <span class="spec-divider">/</span>
+                    <span>₹800–1,800 PER PERSON</span>
                 </div>
 
-                <!-- Social Proof Review Slider -->
-                <div class="review-card-wrapper gsap-fade-up">
-                    <div class="cove-lit-niche">
-                        <div class="review-header">
-                            <div class="stars">★★★★★</div>
-                            <span class="rating-pill">4.2 / 5 (1.4K Google Reviews)</span>
+                <div class="hero-main-grid">
+                    <!-- Left Column: Human Editorial Typography -->
+                    <div class="hero-editorial">
+                        <h1 class="hero-display reveal-item">
+                            Carved from earth.<br>
+                            <em>Built for Ahmedabad’s<br>late-night conversations.</em>
+                        </h1>
+
+                        <p class="hero-body reveal-item">
+                            Tucked behind Rajpath Club, <strong>KOMO by KAFFA</strong> pairs hand-troweled earthen cave vaults and warm recessed cove lighting with wood-fired Neapolitan sourdough pizzas, truffle dimsum, and specialty roasts until 1:00 AM.
+                        </p>
+
+                        <div class="hero-cta-row reveal-item">
+                            <a href="#contact" class="btn-solid magnetic" data-cursor="Reserve">
+                                <span>Book a Table</span>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="#menu" class="btn-ghost magnetic" data-cursor="19 Dishes">
+                                <span>Explore 19 Signatures</span>
+                            </a>
                         </div>
-                        <div class="review-slider" id="reviewSlider">
-                            <div class="review-slide active">
-                                <p class="review-quote">"Food: 5/5 • Atmosphere: 5/5 • Service: 5/5. Absolutely loved this place! The cave-like interiors and warm lighting feel straight out of a Mediterranean resort."</p>
-                                <span class="review-author">— Verified Guest Review</span>
+
+                        <!-- Authentic Guest Note + Subtle Amdavadi Wit -->
+                        <div class="hero-footnote reveal-item">
+                            <div class="footnote-col">
+                                <span class="mono-label">VERIFIED GUEST CONSENSUS</span>
+                                <p>“Food: 5/5 · Atmosphere: 5/5 · Service: 5/5. We ordered pizza and Thai curry, and both were absolutely delicious.”</p>
                             </div>
-                            <div class="review-slide">
-                                <p class="review-quote">"We ordered wood-fired pizza and Thai curry with blue pea rice, and both were absolutely delicious. Easily the most aesthetic cafe in Bodakdev."</p>
-                                <span class="review-author">— Local Guide Review</span>
-                            </div>
-                            <div class="review-slide">
-                                <p class="review-quote">"Stunning pottery displays, energetic vibe, and the French Vanilla Latte & Edamame Truffle Dimsum are unmatched in Ahmedabad."</p>
-                                <span class="review-author">— Evening Diner</span>
+                            <div class="footnote-col border-left">
+                                <span class="mono-label">LOCAL REALITY CHECK</span>
+                                <p>When SG Highway feels like a parking lot, our cave arches behind Rajpath Club feel like a Mediterranean holiday.</p>
                             </div>
                         </div>
-                        <div class="review-controls">
-                            <button class="review-dot active hover-target" data-slide="0" aria-label="Review 1"></button>
-                            <button class="review-dot hover-target" data-slide="1" aria-label="Review 2"></button>
-                            <button class="review-dot hover-target" data-slide="2" aria-label="Review 3"></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Infinite Dish Marquee -->
-        <div class="marquee-wrapper">
-            <div class="marquee-track">
-                <span>Mezze Platter <em>✦</em> Wood-Fired Pizza <em>✦</em> Edamame Truffle Dimsum <em>✦</em> French Vanilla Latte <em>✦</em> Thai Curry with Blue Pea Rice <em>✦</em> Cheese Fondue <em>✦</em> Lotus Biscoff Cheesecake <em>✦</em></span>
-                <span>Mezze Platter <em>✦</em> Wood-Fired Pizza <em>✦</em> Edamame Truffle Dimsum <em>✦</em> French Vanilla Latte <em>✦</em> Thai Curry with Blue Pea Rice <em>✦</em> Cheese Fondue <em>✦</em> Lotus Biscoff Cheesecake <em>✦</em></span>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         PAGE 2: MENU (CULINARY DELIGHTS)
-         ========================================== -->
-    <section id="menu" class="menu-section">
-        <div class="container">
-            <div class="section-heading text-center gsap-fade-up">
-                <span class="cove-pill">ITALIAN BISTRO & GLOBAL KITCHEN</span>
-                <h2>Culinary Delights</h2>
-                <p>Hover over any creation to preview our plating • Average ₹800–1,800 per person</p>
-            </div>
-
-            <!-- Interactive Filter Pills -->
-            <div class="menu-filters gsap-fade-up">
-                <button class="filter-btn active magnetic hover-target" data-filter="all">All Creations (19)</button>
-                <button class="filter-btn magnetic hover-target" data-filter="dimsum">Dimsum & Bao</button>
-                <button class="filter-btn magnetic hover-target" data-filter="pizza">Wood-Fired & Fondue</button>
-                <button class="filter-btn magnetic hover-target" data-filter="mains">Mains & Artisanal Bites</button>
-                <button class="filter-btn magnetic hover-target" data-filter="beverages">Specialty Coffee & Brews</button>
-                <button class="filter-btn magnetic hover-target" data-filter="desserts">Desserts</button>
-            </div>
-
-            <!-- Complete 19-Item Interactive Menu List -->
-            <div class="menu-list">
-                <!-- Dimsum & Bao -->
-                <div class="menu-row hover-target" data-category="dimsum" data-img="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Chilli Cheese Dimsum <span class="badge-popular">Popular</span></h3>
-                        <p>Delicate translucent parcels steamed to perfection with molten chilli cheese</p>
-                    </div>
-                    <span class="menu-price">₹540</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="dimsum" data-img="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Edamame Truffle Dimsum <span class="badge-popular">Popular</span></h3>
-                        <p>Velvety edamame puree infused with aromatic Italian black truffle oil</p>
-                    </div>
-                    <span class="menu-price">₹590</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="dimsum" data-img="https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Sweet Chilli Cottage Cheese Bao</h3>
-                        <p>Cloud-soft lotus leaf buns stuffed with crispy glazed paneer and scallions</p>
-                    </div>
-                    <span class="menu-price">₹510</span>
-                </div>
-
-                <!-- Pizza & Fondue -->
-                <div class="menu-row hover-target" data-category="pizza" data-img="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Vegetable Pizza with Mozzarella Cheese <span class="badge-popular">Popular</span></h3>
-                        <p>Artisanal wood-fired sourdough crust, San Marzano tomatoes, fresh buffalo mozzarella</p>
-                    </div>
-                    <span class="menu-price">₹780</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="pizza" data-img="https://images.unsplash.com/photo-1541514321650-3ce48eb909bc?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Mezze Platter <span class="badge-popular">Popular</span></h3>
-                        <p>House-made truffle hummus, muhammara, falafel, pickled olives & warm wood-fired pita</p>
-                    </div>
-                    <span class="menu-price">₹890</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="pizza" data-img="https://images.unsplash.com/photo-1548340748-6d2b7d7da280?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Classic Swiss Cheese Fondue <span class="badge-popular">Popular</span></h3>
-                        <p>Warm bubbling pot of aged Gruyère and Emmental served with herbed sourdough croutons</p>
-                    </div>
-                    <span class="menu-price">₹850</span>
-                </div>
-
-                <!-- Mains & Bites -->
-                <div class="menu-row hover-target" data-category="mains" data-img="https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Thai Curry with Blue Pea Fried Rice</h3>
-                        <p>Fragrant lemongrass coconut curry paired with butterfly-pea flower jasmine rice</p>
-                    </div>
-                    <span class="menu-price">₹740</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="mains" data-img="https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Avocado Burrata on Toast</h3>
-                        <p>Charred country sourdough crowned with smashed Hass avocado, whole creamy burrata & chili oil</p>
-                    </div>
-                    <span class="menu-price">₹680</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="mains" data-img="https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Nachos Grande</h3>
-                        <p>Crisp house tortilla chips layered with queso blanco, pico de gallo, jalapeños & sour cream</p>
-                    </div>
-                    <span class="menu-price">₹560</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="mains" data-img="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Sriracha Paneer Chilli</h3>
-                        <p>Wok-tossed artisanal cottage cheese glazed in fiery house sriracha and bell peppers</p>
-                    </div>
-                    <span class="menu-price">₹520</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="mains" data-img="https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Peri Peri French Fries</h3>
-                        <p> Crisp hand-cut potato fries dusted with smoky African bird's eye chili spice & truffle mayo</p>
-                    </div>
-                    <span class="menu-price">₹340</span>
-                </div>
-
-                <!-- Beverages -->
-                <div class="menu-row hover-target" data-category="beverages" data-img="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>French Vanilla Latte <span class="badge-popular">Popular</span></h3>
-                        <p>Single-origin Kaffa espresso steamed with velvety milk and Madagascar vanilla bean</p>
-                    </div>
-                    <span class="menu-price">₹320</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="beverages" data-img="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Tiramisu Latte</h3>
-                        <p>Mascarpone-infused espresso topped with dusted Valrhona cocoa and savoiardi notes</p>
-                    </div>
-                    <span class="menu-price">₹360</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="beverages" data-img="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Cranberry Cold Brew</h3>
-                        <p>18-hour slow-steeped dark roast poured over ruby cranberry reduction and tonic</p>
-                    </div>
-                    <span class="menu-price">₹340</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="beverages" data-img="https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Mocha Choco Chip Frappe</h3>
-                        <p>Blended specialty coffee with Belgian dark chocolate chips and whipped cream</p>
-                    </div>
-                    <span class="menu-price">₹380</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="beverages" data-img="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Classic Cold Coffee</h3>
-                        <p>Kaffa's signature rich, frothy cold coffee crafted from freshly roasted Arabica beans</p>
-                    </div>
-                    <span class="menu-price">₹310</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="beverages" data-img="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Artisanal Lemon Iced Tea</h3>
-                        <p>Brisk Assam black tea brewed with fresh orchard lemon zest and mint leaves</p>
-                    </div>
-                    <span class="menu-price">₹260</span>
-                </div>
-
-                <!-- Desserts -->
-                <div class="menu-row hover-target" data-category="desserts" data-img="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Lotus Biscoff Cheesecake</h3>
-                        <p>Baked New York style cheesecake with caramelized Belgian speculoos crust and spread</p>
-                    </div>
-                    <span class="menu-price">₹480</span>
-                </div>
-
-                <div class="menu-row hover-target" data-category="desserts" data-img="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&q=80&w=700">
-                    <div class="menu-item-info">
-                        <h3>Mango Sticky Rice Matcha</h3>
-                        <p>Ceremonial-grade Uji matcha layered with sweet coconut sticky rice and ripe mango</p>
-                    </div>
-                    <span class="menu-price">₹420</span>
-                </div>
-            </div>
-
-            <!-- Floating Cursor Follower Preview -->
-            <div class="floating-menu-preview" id="menuPreview">
-                <div class="preview-inner"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         PAGE 3: GALLERY (THE AESTHETICS)
-         ========================================== -->
-    <section id="gallery" class="gallery-section">
-        <div class="container">
-            <div class="section-heading text-center gsap-fade-up">
-                <span class="cove-pill">ORGANIC CAVE ARCHITECTURE</span>
-                <h2>The Aesthetics</h2>
-                <p>Undulating stucco ceilings, cove-lit pottery alcoves, embossed tree motifs & communal warmth.</p>
-            </div>
-
-            <div class="masonry-grid">
-                <div class="masonry-item tall organic-arch gsap-fade-up hover-target" data-caption="Sculptural Cave Ceilings & Warm Cove Lighting">
-                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=900" alt="Undulating Cave Ceiling and Cove Lighting">
-                    <div class="masonry-overlay"><span>Cave Arches & Cove Glow</span></div>
-                </div>
-
-                <div class="masonry-item gsap-fade-up hover-target" data-caption="Illuminated Terracotta Pottery Shelves">
-                    <img src="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&q=80&w=800" alt="Illuminated Pottery Display">
-                    <div class="masonry-overlay"><span>Illuminated Pottery Wall</span></div>
-                </div>
-
-                <div class="masonry-item gsap-fade-up hover-target" data-caption="Wood-Fired Neapolitan Pizza & Mezze">
-                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=800" alt="Wood Fired Pizza">
-                    <div class="masonry-overlay"><span>Wood-Fired Artisanal Crust</span></div>
-                </div>
-
-                <div class="masonry-item wide gsap-fade-up hover-target" data-caption="The Grand Communal Wooden Table with Plush Tie-Back Seating">
-                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1000" alt="Long Communal Wooden Table">
-                    <div class="masonry-overlay"><span>Communal Dining Sanctuary</span></div>
-                </div>
-
-                <div class="masonry-item gsap-fade-up hover-target" data-caption="Embossed Stucco Tree Branch Relief & Metallic Signage">
-                    <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=800" alt="Embossed Earthy Textures">
-                    <div class="masonry-overlay"><span>Embossed Botanical Stucco</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Lightbox Modal -->
-        <div class="lightbox" id="lightbox" aria-hidden="true">
-            <button class="lightbox-close hover-target" aria-label="Close Lightbox">&times;</button>
-            <div class="lightbox-content">
-                <img src="" alt="Enlarged Gallery View" id="lightboxImg">
-                <p id="lightboxCaption"></p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         PAGE 4: ABOUT US (OUR STORY)
-         ========================================== -->
-    <section id="about" class="about-section">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-visuals gsap-fade-up">
-                    <div class="cave-window-frame">
-                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=900" alt="KOMO Organic Architecture">
-                        <div class="floating-badge">
-                            <strong>KOMO</strong>
-                            <span>BY KAFFA</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="about-narrative gsap-fade-up">
-                    <span class="cove-pill">OUR STORY & ARCHITECTURE</span>
-                    <h2>Where Earthen Tranquility Meets Lively Gastronomy</h2>
-                    <p>Born from Ahmedabad's celebrated coffee pioneers, <strong>KOMO by KAFFA</strong> was envisioned as a tactile departure from ordinary dining. Inspired by carved sandstone grottos and wabi-sabi minimalism, every wall curves organically—textured in warm sand stucco, adorned with hand-embossed tree branches, and bathed in golden recessed cove light.</p>
-                    <p>Whether you gather around our grand communal timber table with plush linen-tied chairs or tuck into an intimate window alcove framed by glowing ceramics, our kitchen pairs wood-fired Italian bistro classics and pan-Asian dimsum with Kaffa's legendary specialty coffee.</p>
-                    
-                    <div class="service-pledge">
-                        <div class="pledge-item">
-                            <h4>Artisanal Craft</h4>
-                            <p>Hand-stretched sourdough pizzas, house-folded dimsum, and single-origin roasts.</p>
-                        </div>
-                        <div class="pledge-item">
-                            <h4>Warm Hospitality</h4>
-                            <p>Attentive, professional table service dedicated to unhurried dining until 1 AM.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         PAGE 5: CONTACT & RESERVATIONS (VISIT US)
-         ========================================== -->
-    <section id="contact" class="contact-section">
-        <div class="container">
-            <div class="contact-split">
-                <!-- Left Side: Details -->
-                <div class="contact-info gsap-fade-up">
-                    <span class="cove-pill">VISIT US IN BODAKDEV</span>
-                    <h2>Reserve Your Sanctuary</h2>
-                    <p class="contact-intro">Join us for sun-dappled afternoon lattes, lively evening dinners, or late-night wood-fired cravings.</p>
-
-                    <div class="info-list">
-                        <div class="info-card">
-                            <span class="info-label">Location</span>
-                            <p>Rajpath Rangoli Rd, behind Rajpath Club,<br>Bodakdev, Ahmedabad, Gujarat 380059</p>
-                        </div>
-                        <div class="info-card">
-                            <span class="info-label">Hours & Valet</span>
-                            <p>Open Daily • Closes at 1:00 AM<br><small>Complimentary Valet Parking Available</small></p>
-                        </div>
-                        <div class="info-card">
-                            <span class="info-label">Direct Line</span>
-                            <p><a href="tel:09925076666" class="hover-target">099250 76666</a></p>
-                        </div>
                     </div>
 
-                    <div class="social-row">
-                        <a href="https://maps.google.com/?q=KOMO+by+KAFFA+Bodakdev+Ahmedabad" target="_blank" rel="noopener" class="btn btn-outline magnetic hover-target">
-                            <span class="btn-text">Get Directions ↗</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Right Side: Reservation Form -->
-                <div class="reservation-box cove-lit-niche gsap-fade-up">
-                    <h3>Table Reservation</h3>
-                    <form id="reservationForm" novalidate>
-                        <div class="form-group">
-                            <label for="guestName">Full Name *</label>
-                            <input type="text" id="guestName" placeholder="e.g. Aarav Mehta" required>
-                            <span class="error-msg">Please enter your name</span>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="guestPhone">Phone Number *</label>
-                                <input type="tel" id="guestPhone" placeholder="10-digit mobile" pattern="[0-9]{10}" required>
-                                <span class="error-msg">Enter a valid 10-digit number</span>
+                    <!-- Right Column: Sculpted Cave Window with Interactive Media Switcher -->
+                    <div class="hero-media-column reveal-item">
+                        <div class="cave-arch-frame" id="heroFrame">
+                            <!-- Layer 1:Actual Interior Stills (Default so your real cafe photos shine immediately) -->
+                            <div class="media-layer active" id="stillsLayer">
+                                <img src="komologo2.webp" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Cave Arches and Cove Lighting" class="hero-still active">
+                                <img src="komo3.webp" onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Communal Table and Pottery Wall" class="hero-still">
+                                <img src="komo2.webp" onerror="this.src='https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Embossed Tree Branch Wall" class="hero-still">
+                                <img src="kom01.webp" onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Exterior Monolith Signage" class="hero-still">
                             </div>
-                            <div class="form-group">
-                                <label for="guestCount">Guests *</label>
-                                <select id="guestCount" required>
-                                    <option value="2">2 Guests</option>
-                                    <option value="4" selected>4 Guests</option>
-                                    <option value="6">6 Guests</option>
-                                    <option value="8+">8+ (Communal Table)</option>
-                                </select>
+
+                           <!-- Layer 2: Ambient Cafe Video Reel -->
+<div class="media-layer" id="videoLayer">
+    <video id="cafeReelVideo" muted loop playsinline preload="auto">
+        <!-- Point to your local video file -->
+        <source src="Video-24060.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+</div>
+
+                            <!-- Tactile Bottom Control Dock inside Arch -->
+                            <div class="arch-control-bar">
+                                <div class="arch-thumbs" role="tablist" aria-label="Switch Hero View">
+                                    <button class="thumb-btn active" data-index="0" data-cursor="Vaults">01 Vaults</button>
+                                    <button class="thumb-btn" data-index="1" data-cursor="Pottery">02 Table</button>
+                                    <button class="thumb-btn" data-index="2" data-cursor="Relief">03 Relief</button>
+                                    <button class="thumb-btn" data-index="3" data-cursor="Facade">04 Sign</button>
+                                    <button class="thumb-btn video-toggle-btn" id="heroVideoBtn" data-cursor="Play">▶ 0:23 Reel</button>
+                                </div>
+                                <span class="arch-caption" id="archCaption">Fig 01. Undulating Stucco Ceiling & Recessed Cove Light</span>
                             </div>
                         </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="resDate">Date *</label>
-                                <input type="date" id="resDate" required>
-                                <span class="error-msg">Please choose a date</span>
-                            </div>
-                            <div class="form-group">
-                                <label for="resTime">Preferred Time *</label>
-                                <select id="resTime" required>
-                                    <option value="13:00">01:00 PM (Lunch)</option>
-                                    <option value="17:00">05:00 PM (Coffee & Sundowner)</option>
-                                    <option value="20:00" selected>08:00 PM (Dinner)</option>
-                                    <option value="21:30">09:30 PM (Prime Dinner)</option>
-                                    <option value="23:00">11:00 PM (Late Night Bistro)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="resNotes">Seating Preference / Special Requests</label>
-                            <textarea id="resNotes" rows="2" placeholder="Pottery alcove, communal wooden table, birthday celebration..."></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary full-width magnetic hover-target">
-                            <span class="btn-text">Confirm Table Request</span>
-                        </button>
-
-                        <div class="booking-success" id="bookingSuccess">
-                            <div class="success-icon">✓</div>
-                            <div>
-                                <h4>Table Request Confirmed!</h4>
-                                <p>We have reserved your spot at KOMO by KAFFA. See you on Rajpath Rangoli Rd!</p>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Stylized Earthy Footer & Map Band -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-map-card">
-                <div class="map-pin-info">
-                    <span class="pin-dot"></span>
+        <!-- =================================================================
+             SECTION 2: MENU (COMPACT INTERACTIVE INDEX + AMDAVADI MODE SWITCH)
+             ================================================================= -->
+        <section id="menu" class="page-section menu-section" data-nav="menu">
+            <div class="container">
+                <div class="section-header-row reveal-item">
                     <div>
-                        <h4>KOMO by KAFFA — Bodakdev</h4>
-                        <p>Behind Rajpath Club, Rajpath Rangoli Rd, Ahmedabad 380059</p>
+                        <span class="mono-label">02 / CULINARY DELIGHTS (19 ITEMS)</span>
+                        <h2 class="section-heading">Wood-Fired, Steamed & Brewed</h2>
+                    </div>
+
+                    <!-- Interactive Amdavadi Meme Translation Switch -->
+                    <div class="amdavadi-switch-box">
+                        <div class="switch-copy">
+                            <span class="switch-title">Amdavadi Honesty Mode</span>
+                            <span class="switch-sub">Translate gourmet notes into real Bodakdev thoughts</span>
+                        </div>
+                        <button type="button" class="toggle-pill-btn" id="memeModeToggle" aria-pressed="false" data-cursor="Flip Vibe">
+                            <span class="toggle-knob"></span>
+                            <span class="toggle-status" id="memeStatusText">OFF</span>
+                        </button>
                     </div>
                 </div>
-                <a href="tel:09925076666" class="footer-call hover-target">Call 099250 76666</a>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2026 KOMO by KAFFA. Crafted with organic warmth in Ahmedabad.</p>
-                <div class="footer-links">
-                    <a href="#home">Top ↑</a>
+
+                <!-- Category Filter Bar -->
+                <div class="menu-filter-bar reveal-item" role="tablist">
+                    <button class="cat-tab active" data-cat="popular">Most Ordered (6)</button>
+                    <button class="cat-tab" data-cat="dimsum">Dimsum & Bao (3)</button>
+                    <button class="cat-tab" data-cat="bistro">Wood-Fired & Mains (7)</button>
+                    <button class="cat-tab" data-cat="coffee">Kaffa Coffee & Cold Brew (6)</button>
+                    <button class="cat-tab" data-cat="dessert">Cheesecake & Matcha (2)</button>
                 </div>
+
+                <!-- Interactive Split Workspace: Left Live Dish Card + Right Scannable Grid -->
+                <div class="menu-workspace reveal-item">
+                    <!-- Left: Sticky Live Dish Inspector -->
+                    <aside class="dish-inspector" id="dishInspector">
+                        <div class="inspector-img-box">
+                            <img id="inspectImg" src="https://images.unsplash.com/photo-1541514321650-3ce48eb909bc?auto=format&fit=crop&q=80&w=900" alt="Selected Dish">
+                            <span class="inspector-badge" id="inspectBadge">Guest Favorite</span>
+                        </div>
+                        <div class="inspector-body">
+                            <div class="inspector-title-row">
+                                <h3 id="inspectTitle">Mezze Platter</h3>
+                                <span class="inspector-price" id="inspectPrice">₹890</span>
+                            </div>
+                            <p class="inspector-desc" id="inspectDesc">
+                                House-crafted truffle hummus, smoky muhammara, crisp herb falafel, pickled olives, and warm wood-fired pita bread.
+                            </p>
+                            <div class="inspector-meme-note" id="inspectMemeBox">
+                                <span class="meme-tag">AMDAVADI VERDICT:</span>
+                                <p id="inspectMemeText">“Ordered ‘for the table’ so everyone feels healthy before demolishing a Fondue pot and Biscoff Cheesecake.”</p>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Right: Compact 2-Column Interactive Bento List -->
+                    <div class="menu-cards-grid" id="menuCardsGrid">
+                        <!-- Rendered via script.js -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             SECTION 3: SPACES / GALLERY (ACTUAL PHOTOS + INTERACTIVE HOTSPOTS)
+             ================================================================= -->
+        <section id="gallery" class="page-section gallery-section" data-nav="gallery">
+            <div class="container">
+                <div class="section-header-row reveal-item">
+                    <div>
+                        <span class="mono-label">03 / THE AESTHETICS & ARCHITECTURE</span>
+                        <h2 class="section-heading">Inside the Earthen Sanctuary</h2>
+                    </div>
+                    <p class="header-aside-note">
+                        Click any architectural frame to expand in full resolution, or hover the interactive pins on Frame 01 to inspect the interior materials.
+                    </p>
+                </div>
+
+                <!-- Architectural Bento Grid Using Your 4 Real KOMO Photos -->
+                <div class="arch-bento-grid reveal-item">
+                    <!-- Frame 01: Main Cave Ceiling with Interactive Material Pins -->
+                    <figure class="arch-card span-2-col span-2-row" data-img="unnamed (1).webp" data-fallback="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=85&w=1400" data-caption="01 / Main Dining Vault — Undulating cave ceiling with recessed 2700K warm LED cove contours.">
+                        <img src="unnamed (1).webp" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=85&w=1400'" alt="KOMO Main Cave Ceiling">
+                        
+                        <!-- Interactive Architectural Pins -->
+                        <div class="arch-pin" style="top: 26%; left: 58%;" data-tip="Recessed 2700K Cove Light — Zero harsh glare, 100% flattering Instagram lighting.">
+                            <span class="pin-plus">+</span>
+                        </div>
+                        <div class="arch-pin" style="top: 62%; left: 22%;" data-tip="Hand-Troweled Stucco — Absorbs room echo so you can actually hear your friends.">
+                            <span class="pin-plus">+</span>
+                        </div>
+
+                        <div class="pin-tooltip" id="pinTooltip">Hover a (+) pin to inspect architectural details</div>
+
+                        <figcaption class="arch-caption-bar">
+                            <span>01 / CAVE VAULTS & COVE LIGHT</span>
+                            <span>EXPAND ↗</span>
+                        </figcaption>
+                    </figure>
+
+                    <!-- Frame 02: Long Communal Table & Pottery Wall -->
+                    <figure class="arch-card span-2-col" data-img="unnamed.webp" data-fallback="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=85&w=1200" data-caption="02 / The Communal Sanctuary — 16-seater timber table flanked by organic window cutouts and backlit terracotta pottery.">
+                        <img src="unnamed.webp" onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=85&w=1200'" alt="KOMO Communal Table and Pottery Wall">
+                        <figcaption class="arch-caption-bar">
+                            <span>02 / POTTERY ALCOVE & 16-SEATER TIMBER TABLE</span>
+                            <span>EXPAND ↗</span>
+                        </figcaption>
+                    </figure>
+
+                    <!-- Frame 03: Embossed Tree Branch Wall Art -->
+                    <figure class="arch-card" data-img="unnamed (2).webp" data-fallback="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=85&w=900" data-caption="03 / Botanical Stucco Relief — Sculpted tree branches framing backlit mirror-polished KOMO signage.">
+                        <img src="unnamed (2).webp" onerror="this.src='https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=85&w=900'" alt="KOMO Embossed Wall Relief">
+                        <figcaption class="arch-caption-bar">
+                            <span>03 / EMBOSSED TREE RELIEF</span>
+                            <span>EXPAND ↗</span>
+                        </figcaption>
+                    </figure>
+
+                    <!-- Frame 04: Exterior Sign Monolith -->
+                    <figure class="arch-card" data-img="unnamed (3).webp" data-fallback="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=85&w=900" data-caption="04 / Daylight Earth Monolith — Textured sand-plaster exterior wall in Bodakdev.">
+                        <img src="unnamed (3).webp" onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=85&w=900'" alt="KOMO Exterior Sign">
+                        <figcaption class="arch-caption-bar">
+                            <span>04 / EXTERIOR MONOLITH</span>
+                            <span>EXPAND ↗</span>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             SECTION 4: STORY & AMDAVADI CAFE CULTURE (COMPACT & WITTY)
+             ================================================================= -->
+        <section id="about" class="page-section about-section" data-nav="about">
+            <div class="container">
+                <div class="about-layout reveal-item">
+                    <!-- Left: Narrative & Interactive Chapters -->
+                    <div class="about-narrative-box">
+                        <span class="mono-label">04 / OUR STORY & LOCAL LORE</span>
+                        <h2 class="section-heading">Why Bodakdev Treats KOMO Like a Second Living Room.</h2>
+                        <p class="about-lead">
+                            Conceived by the team behind Kaffa Coffee Roasters, KOMO was built to answer a simple question: <em>What if a cafe felt like a sculpted earthen gallery, yet served comfort food bold enough for an Amdavadi palate at midnight?</em>
+                        </p>
+
+                        <!-- Interactive Chapter Switcher -->
+                        <div class="chapter-accordion" role="tablist">
+                            <button class="chapter-item active" data-chap="0">
+                                <span class="chap-num">I</span>
+                                <div>
+                                    <h4>The Architecture: Zero Sharp Corners</h4>
+                                    <p>Every wall curves like a natural sandstone canyon—finished in warm clay plaster with custom ceramic alcoves.</p>
+                                </div>
+                            </button>
+                            <button class="chapter-item" data-chap="1">
+                                <span class="chap-num">II</span>
+                                <div>
+                                    <h4>The Kitchen: Wood-Fired Meets Pan-Asian</h4>
+                                    <p>From blistered mozzarella pizzas and Swiss cheese fondue to blue-pea Thai curry and truffle edamame dimsum.</p>
+                                </div>
+                            </button>
+                            <button class="chapter-item" data-chap="2">
+                                <span class="chap-num">III</span>
+                                <div>
+                                    <h4>The Service Pledge</h4>
+                                    <p>Rated 4.2★ across 1,389+ reviews. When peak-hour weekend rushes hit, our floor managers actively prioritize table comfort.</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: "Unspoken Rules of KOMO" — Authentic Ahmedabad Meme Board -->
+                    <div class="amdavad-meme-board">
+                        <div class="meme-board-header">
+                            <span class="mono-label">CULTURAL FIELD NOTES · AHMEDABAD EDITION</span>
+                            <span class="meme-pill">100% Relatable</span>
+                        </div>
+                        <h3>The 4 Unspoken Rules of Visiting KOMO</h3>
+
+                        <div class="meme-cards-stack">
+                            <div class="meme-row-card">
+                                <span class="meme-idx">#01</span>
+                                <div>
+                                    <h5>The “Bas 5 Minute Ma Pahochu” Paradox</h5>
+                                    <p>Your friend says they’ve crossed Pakwan Crossroads. Order the <strong>Peri Peri Fries</strong> now—they are still looking for parking near Rajpath Club.</p>
+                                </div>
+                            </div>
+
+                            <div class="meme-row-card">
+                                <span class="meme-idx">#02</span>
+                                <div>
+                                    <h5>The Mandatory Pottery Wall Photoshoot</h5>
+                                    <p>If you didn’t take a portrait in front of the backlit terracotta pottery shelves or the mirror-chrome KOMO sign, did you even go to Bodakdev?</p>
+                                </div>
+                            </div>
+
+                            <div class="meme-row-card">
+                                <span class="meme-idx">#03</span>
+                                <div>
+                                    <h5>“Biscoff Cheesecake is a Sharing Dish” (A Lie)</h5>
+                                    <p>Every table orders one Lotus Biscoff Cheesecake with four spoons, and within 45 seconds it turns into a polite cold war over the last crust bite.</p>
+                                </div>
+                            </div>
+
+                            <div class="meme-row-card">
+                                <span class="meme-idx">#04</span>
+                                <div>
+                                    <h5>The 11:30 PM “Chalo Coffee Piva” Drive</h5>
+                                    <p>Starts as a casual late-night cold brew run; ends at 12:45 AM with a full Wood-Fired Pizza, Chilli Cheese Dimsum, and startup pitch discussions.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             SECTION 5: CONTACT & RESERVATIONS (WITH LIVE BILL/VIBE ESTIMATOR)
+             ================================================================= -->
+        <section id="contact" class="page-section contact-section" data-nav="contact">
+            <div class="container">
+                <div class="contact-grid reveal-item">
+                    <!-- Left: Direct Location & Interactive Estimator -->
+                    <div class="contact-details-col">
+                        <span class="mono-label">05 / VISIT US & BOOK A TABLE</span>
+                        <h2 class="section-heading">See You Tonight on Rajpath Rangoli Road.</h2>
+
+                        <div class="address-ledger">
+                            <div class="ledger-row">
+                                <span class="ledger-key">ADDRESS</span>
+                                <span class="ledger-val">Rajpath Rangoli Rd, behind Rajpath Club,<br>Bodakdev, Ahmedabad, Gujarat 380059</span>
+                            </div>
+                            <div class="ledger-row">
+                                <span class="ledger-key">HOURS</span>
+                                <span class="ledger-val">Open Daily · Closes 1:00 AM</span>
+                            </div>
+                            <div class="ledger-row">
+                                <span class="ledger-key">DIRECT LINE</span>
+                                <span class="ledger-val"><a href="tel:09925076666">099250 76666</a></span>
+                            </div>
+                            <div class="ledger-row">
+                                <span class="ledger-key">EST. SPEND</span>
+                                <span class="ledger-val" id="liveSpendEstimate">₹3,200 – ₹4,800 for 4 Guests (₹800–1,800/person)</span>
+                            </div>
+                        </div>
+
+                        <div class="map-action-bar">
+                            <a href="https://maps.google.com/?q=KOMO+by+KAFFA+Bodakdev+Ahmedabad" target="_blank" rel="noopener" class="btn-solid magnetic" data-cursor="Maps">
+                                <span>Directions on Google Maps ↗</span>
+                            </a>
+                            <a href="tel:09925076666" class="btn-ghost magnetic" data-cursor="Call">
+                                <span>Call 099250 76666</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right: Reservation Console -->
+                    <div class="reservation-card">
+                        <form id="reservationForm" novalidate>
+                            <div class="form-top-bar">
+                                <h3>Reserve a Table</h3>
+                                <span class="mono-label">INSTANT CONFIRMATION</span>
+                            </div>
+
+                            <!-- Interactive Guest Selector (Updates Live Spend Estimate) -->
+                            <div class="field-group">
+                                <label>Select Party Size</label>
+                                <div class="segmented-options" id="partySizeSelector">
+                                    <button type="button" class="seg-opt" data-guests="2">2 Guests</button>
+                                    <button type="button" class="seg-opt active" data-guests="4">4 Guests</button>
+                                    <button type="button" class="seg-opt" data-guests="6">6 Guests</button>
+                                    <button type="button" class="seg-opt" data-guests="10">8+ Communal</button>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Seating Zone Selector -->
+                            <div class="field-group">
+                                <label>Seating Preference</label>
+                                <div class="segmented-options" id="seatingZoneSelector">
+                                    <button type="button" class="seg-opt active" data-zone="Cave Vault Hall">Cave Vault Hall</button>
+                                    <button type="button" class="seg-opt" data-zone="Pottery Alcove">Pottery Alcove</button>
+                                    <button type="button" class="seg-opt" data-zone="16-Seater Timber Table">Communal Table</button>
+                                </div>
+                            </div>
+
+                            <div class="field-row-2">
+                                <div class="field-group">
+                                    <label for="guestName">Full Name *</label>
+                                    <input type="text" id="guestName" placeholder="e.g. Rohan Shah" required>
+                                </div>
+                                <div class="field-group">
+                                    <label for="guestPhone">Phone Number *</label>
+                                    <input type="tel" id="guestPhone" placeholder="10-digit mobile" pattern="[0-9]{10}" required>
+                                </div>
+                            </div>
+
+                            <div class="field-row-2">
+                                <div class="field-group">
+                                    <label for="guestDate">Date *</label>
+                                    <input type="date" id="guestDate" required>
+                                </div>
+                                <div class="field-group">
+                                    <label for="guestTime">Time Slot *</label>
+                                    <select id="guestTime" required>
+                                        <option value="13:30">01:30 PM — Lunch</option>
+                                        <option value="17:30">05:30 PM — Evening Coffee</option>
+                                        <option value="20:15" selected>08:15 PM — Prime Dinner</option>
+                                        <option value="21:45">09:45 PM — Late Dinner</option>
+                                        <option value="23:15">11:15 PM — Late-Night Bistro</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-submit-table magnetic" data-cursor="Confirm">
+                                <span id="submitBtnLabel">Confirm Table Request</span>
+                            </button>
+
+                            <div class="reservation-feedback" id="reservationFeedback" aria-live="polite">
+                                <div class="feedback-badge">CONFIRMED</div>
+                                <div>
+                                    <h4 id="feedbackTitle">Table Held for 4 Guests</h4>
+                                    <p id="feedbackDetails">Zone: Cave Vault Hall · See you behind Rajpath Club!</p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Clean Editorial Footer -->
+    <footer class="site-footer">
+        <div class="container footer-row">
+            <div>
+                <strong>KOMO BY KAFFA</strong>
+                <span>— Rajpath Rangoli Rd, Bodakdev, Ahmedabad 380059</span>
+            </div>
+            <div class="footer-right">
+                <a href="#home">Back to Top ↑</a>
             </div>
         </div>
     </footer>
 
-    <!-- GSAP & ScrollTrigger -->
+    <!-- Fullscreen Lightbox Modal -->
+    <div class="lightbox-modal" id="lightboxModal" aria-hidden="true">
+        <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+        <div class="lightbox-inner">
+            <img src="" alt="Expanded KOMO Interior" id="lightboxImage">
+            <p id="lightboxCaption"></p>
+        </div>
+    </div>
+
+    <!-- GSAP + ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="script.js"></script>
