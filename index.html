@@ -479,220 +479,345 @@
             </div>
         </section>
 
-        <!-- =================================================================
-             SECTION 4: STORY & AMDAVADI CAFE CULTURE (COMPACT & WITTY)
+       <!-- =================================================================
+             SECTION 4: THE 12 PM – 1 AM CHRONICLE & TACTILE COASTER DECK
              ================================================================= -->
         <section id="about" class="page-section about-section" data-nav="about">
             <div class="container">
-                <div class="about-layout reveal-item">
-                    <!-- Left: Narrative & Interactive Chapters -->
-                    <div class="about-narrative-box">
-                        <span class="mono-label">04 / OUR STORY & LOCAL LORE</span>
-                        <h2 class="section-heading">Why Bodakdev Treats KOMO Like a Second Living Room.</h2>
-                        <p class="about-lead">
-                            Conceived by the team behind Kaffa Coffee Roasters, KOMO was built to answer a simple question: <em>What if a cafe felt like a sculpted earthen gallery, yet served comfort food bold enough for an Amdavadi palate at midnight?</em>
-                        </p>
+                <!-- Minimalist Editorial Header -->
+                <div class="story-header-minimal reveal-item">
+                    <div>
+                        <span class="mono-label">04 / THE SANCTUARY & LOCAL LORE</span>
+                        <h2 class="section-heading">Four Hours. Four Moods.</h2>
+                    </div>
+                    <div class="story-stat-badges">
+                        <span class="stat-stone-pill"><strong>0°</strong> Sharp Corners</span>
+                        <span class="stat-stone-pill"><strong>2700K</strong> Cove Glow</span>
+                        <span class="stat-stone-pill"><strong>01:00 AM</strong> Last Pour</span>
+                    </div>
+                </div>
 
-                        <!-- Interactive Chapter Switcher -->
-                        <div class="chapter-accordion" role="tablist">
-                            <button class="chapter-item active" data-chap="0">
-                                <span class="chap-num">I</span>
-                                <div>
-                                    <h4>The Architecture: Zero Sharp Corners</h4>
-                                    <p>Every wall curves like a natural sandstone canyon—finished in warm clay plaster with custom ceramic alcoves.</p>
-                                </div>
+                <!-- 2-Column Interactive Stage: Time-of-Day Arch Dial + 3D Coaster Flipper -->
+                <div class="story-interactive-stage reveal-item">
+
+                    <!-- LEFT: Interactive 12 PM -> 1 AM Sanctuary Dial -->
+                    <div class="chronicle-dial-card" id="chronicleCard" data-mood="noon">
+                        <!-- Top Time Selector Dock -->
+                        <div class="time-dial-dock" role="tablist" aria-label="Experience KOMO by Hour">
+                            <button type="button" class="dial-btn active"
+                                data-idx="0"
+                                data-mood="noon"
+                                data-time="01:00 PM"
+                                data-tag="ARCHITECTURAL CALM"
+                                data-headline="Sun-dappled stucco arches & quiet midday pour-overs."
+                                data-order="ON TABLES: Avocado Burrata Toast · Cranberry Cold Brew"
+                                data-img="komo3.webp"
+                                data-fallback="unnamed.webp">
+                                <span class="d-dot"></span>01 PM
                             </button>
-                            <button class="chapter-item" data-chap="1">
-                                <span class="chap-num">II</span>
-                                <div>
-                                    <h4>The Kitchen: Wood-Fired Meets Pan-Asian</h4>
-                                    <p>From blistered mozzarella pizzas and Swiss cheese fondue to blue-pea Thai curry and truffle edamame dimsum.</p>
-                                </div>
+
+                            <button type="button" class="dial-btn"
+                                data-idx="1"
+                                data-mood="golden"
+                                data-time="05:30 PM"
+                                data-tag="KAFFA ROASTERY HOUR"
+                                data-headline="Golden cove light ignites across 40 terracotta vessels."
+                                data-order="ON TABLES: French Vanilla Latte · Peri Peri Fries"
+                                data-img="komo2.webp"
+                                data-fallback="unnamed (2).webp">
+                                <span class="d-dot"></span>05:30 PM
                             </button>
-                            <button class="chapter-item" data-chap="2">
-                                <span class="chap-num">III</span>
-                                <div>
-                                    <h4>The Service Pledge</h4>
-                                    <p>Rated 4.2★ across 1,389+ reviews. When peak-hour weekend rushes hit, our floor managers actively prioritize table comfort.</p>
-                                </div>
+
+                            <button type="button" class="dial-btn"
+                                data-idx="2"
+                                data-mood="dinner"
+                                data-time="09:00 PM"
+                                data-tag="PEAK BISTRO ENERGY"
+                                data-headline="Wood-fired sourdough & molten fondue under the vaults."
+                                data-order="ON TABLES: Mozzarella Pizza · Truffle Dimsum · Fondue"
+                                data-img="komologo2.webp"
+                                data-fallback="unnamed (1).webp">
+                                <span class="d-dot"></span>09 PM
                             </button>
+
+                            <button type="button" class="dial-btn"
+                                data-idx="3"
+                                data-mood="midnight"
+                                data-time="12:30 AM"
+                                data-tag="LATE-NIGHT SANCTUARY"
+                                data-headline="When SG Highway sleeps, Bodakdev’s second living room wakes up."
+                                data-order="ON TABLES: Lotus Biscoff Cheesecake · Classic Cold Coffee"
+                                data-img="image_63ffb2.jpg"
+                                data-fallback="unnamed (3).webp">
+                                <span class="d-dot"></span>12:30 AM
+                            </button>
+                        </div>
+
+                        <!-- Visual Stage Inside the Dial -->
+                        <div class="chronicle-visual-frame">
+                            <img id="chronicleImg" src="komo3.webp" onerror="this.src='unnamed.webp'" alt="KOMO Mood by Hour">
+                            <div class="chronicle-vignette"></div>
+
+                            <div class="chronicle-caption-overlay">
+                                <div class="c-meta-top">
+                                    <span class="c-time-badge" id="chronicleTimeBadge">01:00 PM</span>
+                                    <span class="c-mood-tag" id="chronicleTag">ARCHITECTURAL CALM</span>
+                                </div>
+                                <h3 id="chronicleHeadline">Sun-dappled stucco arches & quiet midday pour-overs.</h3>
+                                <p class="c-order-strip" id="chronicleOrder">ON TABLES: Avocado Burrata Toast · Cranberry Cold Brew</p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Right: "Unspoken Rules of KOMO" — Authentic Ahmedabad Meme Board -->
-                    <div class="amdavad-meme-board">
-                        <div class="meme-board-header">
-                            <span class="mono-label">CULTURAL FIELD NOTES · AHMEDABAD EDITION</span>
-                            <span class="meme-pill">100% Relatable</span>
+                    <!-- RIGHT: Tactile KOMO Sandstone Coaster Deck (Interactive Meme Flipper) -->
+                    <div class="coaster-lore-stage">
+                        <div class="coaster-top-meta">
+                            <span class="mono-label">OVERHEARD AT THE 16-SEATER TABLE</span>
+                            <span class="coaster-counter" id="coasterCounter">COASTER 01 / 04</span>
                         </div>
-                        <h3>The 4 Unspoken Rules of Visiting KOMO</h3>
 
-                        <div class="meme-cards-stack">
-                            <div class="meme-row-card">
-                                <span class="meme-idx">#01</span>
-                                <div>
-                                    <h5>The “Bas 5 Minute Ma Pahochu” Paradox</h5>
-                                    <p>Your friend says they’ve crossed Pakwan Crossroads. Order the <strong>Peri Peri Fries</strong> now—they are still looking for parking near Rajpath Club.</p>
-                                </div>
-                            </div>
+                        <!-- 3D Stacked Sandstone Coaster Card -->
+                        <div class="coaster-stack-wrap" id="coasterDeckTrigger" data-cursor="Flip Card">
+                            <!-- Background shadow coasters for physical depth -->
+                            <div class="coaster-shadow-card c-back-2" aria-hidden="true"></div>
+                            <div class="coaster-shadow-card c-back-1" aria-hidden="true"></div>
 
-                            <div class="meme-row-card">
-                                <span class="meme-idx">#02</span>
-                                <div>
-                                    <h5>The Mandatory Pottery Wall Photoshoot</h5>
-                                    <p>If you didn’t take a portrait in front of the backlit terracotta pottery shelves or the mirror-chrome KOMO sign, did you even go to Bodakdev?</p>
+                            <!-- Active Interactive Coaster -->
+                            <article class="coaster-active-card" id="activeCoasterCard">
+                                <div class="coaster-stamp-row">
+                                    <span class="coaster-ring-mark">KOMO · BODAKDEV</span>
+                                    <span class="coaster-truth-pill" id="coasterTag">#01 PARKING LORE</span>
                                 </div>
-                            </div>
 
-                            <div class="meme-row-card">
-                                <span class="meme-idx">#03</span>
-                                <div>
-                                    <h5>“Biscoff Cheesecake is a Sharing Dish” (A Lie)</h5>
-                                    <p>Every table orders one Lotus Biscoff Cheesecake with four spoons, and within 45 seconds it turns into a polite cold war over the last crust bite.</p>
-                                </div>
-                            </div>
+                                <blockquote class="coaster-quote" id="coasterQuote">
+                                    “Your friend says <em>‘Bas 5 minute, Pakwan cross karyu.’</em> Order the Peri Peri Fries now—they are still hunting for parking behind Rajpath Club.”
+                                </blockquote>
 
-                            <div class="meme-row-card">
-                                <span class="meme-idx">#04</span>
-                                <div>
-                                    <h5>The 11:30 PM “Chalo Coffee Piva” Drive</h5>
-                                    <p>Starts as a casual late-night cold brew run; ends at 12:45 AM with a full Wood-Fired Pizza, Chilli Cheese Dimsum, and startup pitch discussions.</p>
+                                <div class="coaster-foot-row">
+                                    <span class="coaster-subnote" id="coasterSub">Verified by 99% of West Ahmedabad groups</span>
+                                    <button type="button" class="btn-flip-coaster" id="flipCoasterBtn">
+                                        <span>Next Coaster</span>
+                                        <span class="flip-icon">↻</span>
+                                    </button>
                                 </div>
-                            </div>
+                            </article>
+                        </div>
+
+                        <!-- Quick Dot Indicators -->
+                        <div class="coaster-dots" id="coasterDots" role="tablist" aria-label="Select Coaster">
+                            <button type="button" class="c-dot active" data-cidx="0" aria-label="Coaster 1"></button>
+                            <button type="button" class="c-dot" data-cidx="1" aria-label="Coaster 2"></button>
+                            <button type="button" class="c-dot" data-cidx="2" aria-label="Coaster 3"></button>
+                            <button type="button" class="c-dot" data-cidx="3" aria-label="Coaster 4"></button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
-
         <!-- =================================================================
-             SECTION 5: CONTACT & RESERVATIONS (WITH LIVE BILL/VIBE ESTIMATOR)
+             SECTION 5: VISUAL SANCTUARY BOOKING & LIVE TABLE PASS (ZERO OVERFLOW)
              ================================================================= -->
         <section id="contact" class="page-section contact-section" data-nav="contact">
             <div class="container">
-                <div class="contact-grid reveal-item">
-                    <!-- Left: Direct Location & Interactive Estimator -->
-                    <div class="contact-details-col">
-                        <span class="mono-label">05 / VISIT US & BOOK A TABLE</span>
-                        <h2 class="section-heading">See You Tonight on Rajpath Rangoli Road.</h2>
-
-                        <div class="address-ledger">
-                            <div class="ledger-row">
-                                <span class="ledger-key">ADDRESS</span>
-                                <span class="ledger-val">Rajpath Rangoli Rd, behind Rajpath Club,<br>Bodakdev, Ahmedabad, Gujarat 380059</span>
-                            </div>
-                            <div class="ledger-row">
-                                <span class="ledger-key">HOURS</span>
-                                <span class="ledger-val">Open Daily · Closes 1:00 AM</span>
-                            </div>
-                            <div class="ledger-row">
-                                <span class="ledger-key">DIRECT LINE</span>
-                                <span class="ledger-val"><a href="tel:09925076666">099250 76666</a></span>
-                            </div>
-                            <div class="ledger-row">
-                                <span class="ledger-key">EST. SPEND</span>
-                                <span class="ledger-val" id="liveSpendEstimate">₹3,200 – ₹4,800 for 4 Guests (₹800–1,800/person)</span>
-                            </div>
-                        </div>
-
-                        <div class="map-action-bar">
-                            <a href="https://maps.google.com/?q=KOMO+by+KAFFA+Bodakdev+Ahmedabad" target="_blank" rel="noopener" class="btn-solid magnetic" data-cursor="Maps">
-                                <span>Directions on Google Maps ↗</span>
-                            </a>
-                            <a href="tel:09925076666" class="btn-ghost magnetic" data-cursor="Call">
-                                <span>Call 099250 76666</span>
-                            </a>
-                        </div>
+                <div class="reserve-header-compact reveal-item">
+                    <div>
+                        <span class="mono-label">05 / TABLE RESERVATIONS · BODAKDEV</span>
+                        <h2 class="section-heading">Claim Your Sanctuary.</h2>
                     </div>
+                    <div class="quick-locate-pills">
+                        <a href="https://maps.google.com/?q=KOMO+by+KAFFA+Bodakdev+Ahmedabad" target="_blank" rel="noopener" class="locate-pill">
+                            <span> Behind Rajpath Club</span>
+                            <span>Maps ↗</span>
+                        </a>
+                        <a href="tel:09925076666" class="locate-pill">
+                            <span> 099250 76666</span>
+                        </a>
+                    </div>
+                </div>
 
-                    <!-- Right: Reservation Console -->
-                    <div class="reservation-card">
+                <!-- Bespoke Visual Pass Builder (Replaces Boring AI Form) -->
+                <div class="sanctuary-pass-builder reveal-item">
+
+                    <!-- LEFT: Visual Zone Cards + Custom Touch-Friendly Date/Time Scrollers -->
+                    <div class="builder-controls-card">
                         <form id="reservationForm" novalidate>
-                            <div class="form-top-bar">
-                                <h3>Reserve a Table</h3>
-                                <span class="mono-label">INSTANT CONFIRMATION</span>
-                            </div>
 
-                            <!-- Interactive Guest Selector (Updates Live Spend Estimate) -->
-                            <div class="field-group">
-                                <label>Select Party Size</label>
-                                <div class="segmented-options" id="partySizeSelector">
-                                    <button type="button" class="seg-opt" data-guests="2">2 Guests</button>
-                                    <button type="button" class="seg-opt active" data-guests="4">4 Guests</button>
-                                    <button type="button" class="seg-opt" data-guests="6">6 Guests</button>
-                                    <button type="button" class="seg-opt" data-guests="10">8+ Communal</button>
+                            <!-- Step 1: Visual Space Cards (Uses Your Real KOMO Photos) -->
+                            <div class="builder-step">
+                                <div class="step-label-row">
+                                    <span class="step-tag">01 / CHOOSE YOUR SPACE</span>
+                                    <span class="step-hint" id="zoneVibeHint">2700K Cove-Lit Main Vault</span>
                                 </div>
-                            </div>
 
-                            <!-- Interactive Seating Zone Selector -->
-                            <div class="field-group">
-                                <label>Seating Preference</label>
-                                <div class="segmented-options" id="seatingZoneSelector">
-                                    <button type="button" class="seg-opt active" data-zone="Cave Vault Hall">Cave Vault Hall</button>
-                                    <button type="button" class="seg-opt" data-zone="Pottery Alcove">Pottery Alcove</button>
-                                    <button type="button" class="seg-opt" data-zone="16-Seater Timber Table">Communal Table</button>
-                                </div>
-                            </div>
+                                <div class="visual-zone-grid" id="seatingZoneSelector">
+                                    <button type="button" class="zone-visual-card active" data-zone="Cave Vault Hall" data-vibe="2700K Cove-Lit Main Vault" data-img="komologo2.webp">
+                                        <img src="komologo2.webp" onerror="this.src='unnamed (1).webp'" alt="Cave Vault Hall">
+                                        <div class="zone-card-shade">
+                                            <span class="zone-check">✓</span>
+                                            <div>
+                                                <strong>Cave Vaults</strong>
+                                                <small>Main Arch Hall</small>
+                                            </div>
+                                        </div>
+                                    </button>
 
-                            <div class="field-row-2">
-                                <div class="field-group">
-                                    <label for="guestName">Full Name *</label>
-                                    <input type="text" id="guestName" placeholder="e.g. Rohan Shah" required>
-                                </div>
-                                <div class="field-group">
-                                    <label for="guestPhone">Phone Number *</label>
-                                    <input type="tel" id="guestPhone" placeholder="10-digit mobile" pattern="[0-9]{10}" required>
-                                </div>
-                            </div>
+                                    <button type="button" class="zone-visual-card" data-zone="Pottery Alcove" data-vibe="Intimate Backlit Ceramic Niche" data-img="komo3.webp">
+                                        <img src="komo3.webp" onerror="this.src='unnamed.webp'" alt="Pottery Alcove">
+                                        <div class="zone-card-shade">
+                                            <span class="zone-check">✓</span>
+                                            <div>
+                                                <strong>Pottery Alcove</strong>
+                                                <small>Ceramic Wall</small>
+                                            </div>
+                                        </div>
+                                    </button>
 
-                            <div class="field-row-2">
-                                <div class="field-group">
-                                    <label for="guestDate">Date *</label>
-                                    <input type="date" id="guestDate" required>
-                                </div>
-                                <div class="field-group">
-                                    <label for="guestTime">Time Slot *</label>
-                                    <select id="guestTime" required>
-                                        <option value="13:30">01:30 PM — Lunch</option>
-                                        <option value="17:30">05:30 PM — Evening Coffee</option>
-                                        <option value="20:15" selected>08:15 PM — Prime Dinner</option>
-                                        <option value="21:45">09:45 PM — Late Dinner</option>
-                                        <option value="23:15">11:15 PM — Late-Night Bistro</option>
-                                    </select>
+                                    <button type="button" class="zone-visual-card" data-zone="16-Seater Timber Table" data-vibe="Grand Solid Wood Communal Table" data-img="unnamed.webp">
+                                        <img src="unnamed.webp" onerror="this.src='komo2.webp'" alt="Communal Timber Table">
+                                        <div class="zone-card-shade">
+                                            <span class="zone-check">✓</span>
+                                            <div>
+                                                <strong>Timber Table</strong>
+                                                <small>Communal 8–16</small>
+                                            </div>
+                                        </div>
+                                    </button>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn-submit-table magnetic" data-cursor="Confirm">
-                                <span id="submitBtnLabel">Confirm Table Request</span>
+                            <!-- Step 2: Tactile Guest Dial & Custom 7-Day Date Strip (Zero iOS Overflow!) -->
+                            <div class="builder-step">
+                                <div class="step-label-row">
+                                    <span class="step-tag">02 / GUESTS & EVENING</span>
+                                    <span class="step-hint" id="liveSpendEstimate">Est. ₹3,200–4,800</span>
+                                </div>
+
+                                <!-- Compact Guest Counter Pills -->
+                                <div class="guest-pill-strip" id="partySizeSelector">
+                                    <button type="button" class="g-pill" data-guests="2">2 Guests</button>
+                                    <button type="button" class="g-pill active" data-guests="4">4 Guests</button>
+                                    <button type="button" class="g-pill" data-guests="6">6 Guests</button>
+                                    <button type="button" class="g-pill" data-guests="8">8+ Group</button>
+                                </div>
+
+                                <!-- Custom 7-Day Date Ribbon (Replaces broken mobile <input type="date">) -->
+                                <div class="date-ribbon-scroll" id="customDateRibbon" role="radiogroup" aria-label="Select Reservation Date">
+                                    <!-- Dynamically populated with next 7 days via script.js -->
+                                </div>
+                                <input type="hidden" id="guestDate" required>
+
+                                <!-- Visual Time Chips -->
+                                <div class="time-chips-row" id="customTimeSelector">
+                                    <button type="button" class="time-chip" data-time="01:30 PM">
+                                        <strong>01:30 PM</strong><span>Lunch</span>
+                                    </button>
+                                    <button type="button" class="time-chip" data-time="05:30 PM">
+                                        <strong>05:30 PM</strong><span>Coffee</span>
+                                    </button>
+                                    <button type="button" class="time-chip active" data-time="08:15 PM">
+                                        <strong>08:15 PM</strong><span>Dinner</span>
+                                    </button>
+                                    <button type="button" class="time-chip" data-time="09:45 PM">
+                                        <strong>09:45 PM</strong><span>Prime</span>
+                                    </button>
+                                    <button type="button" class="time-chip" data-time="11:15 PM">
+                                        <strong>11:15 PM</strong><span>Late Bistro</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Minimal Bottom-Border Guest Signature -->
+                            <div class="builder-step last-step">
+                                <div class="signature-inputs-grid">
+                                    <div class="minimal-input-box">
+                                        <label for="guestName">RESERVATION UNDER NAME *</label>
+                                        <input type="text" id="guestName" placeholder="e.g. Rohan Shah" autocomplete="name" required>
+                                    </div>
+                                    <div class="minimal-input-box">
+                                        <label for="guestPhone">WHATSAPP / MOBILE *</label>
+                                        <input type="tel" id="guestPhone" placeholder="10-digit number" inputmode="numeric" pattern="[0-9]{10}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-issue-pass magnetic" data-cursor="Issue Pass">
+                                <span id="submitBtnLabel">Issue KOMO Table Pass</span>
+                                <span class="pass-arrow">→</span>
                             </button>
-
-                            <div class="reservation-feedback" id="reservationFeedback" aria-live="polite">
-                                <div class="feedback-badge">CONFIRMED</div>
-                                <div>
-                                    <h4 id="feedbackTitle">Table Held for 4 Guests</h4>
-                                    <p id="feedbackDetails">Zone: Cave Vault Hall · See you behind Rajpath Club!</p>
-                                </div>
-                            </div>
                         </form>
                     </div>
+
+                    <!-- RIGHT: Live Perforated KOMO Sanctuary Table Pass (Visual Ticket) -->
+                    <aside class="live-table-pass" id="liveTablePass" aria-label="Live Table Pass Preview">
+                        <div class="pass-visual-header">
+                            <img id="passZoneBg" src="komologo2.webp" onerror="this.src='unnamed (1).webp'" alt="Selected KOMO Zone">
+                            <div class="pass-header-overlay">
+                                <div class="pass-brand-row">
+                                    <span class="pass-komo">KOMO</span>
+                                    <span class="pass-badge" id="passStatusBadge">LIVE PREVIEW</span>
+                                </div>
+                                <p class="pass-zone-title" id="passZoneTitle">Cave Vault Hall</p>
+                            </div>
+                        </div>
+
+                        <!-- Perforated Ticket Notch Divider -->
+                        <div class="pass-perforation" aria-hidden="true">
+                            <span class="notch-left"></span>
+                            <span class="perf-line"></span>
+                            <span class="notch-right"></span>
+                        </div>
+
+                        <div class="pass-body">
+                            <div class="pass-specs-grid">
+                                <div class="pass-spec">
+                                    <span class="p-label">DATE</span>
+                                    <strong id="passDateReadout">Today</strong>
+                                </div>
+                                <div class="pass-spec">
+                                    <span class="p-label">TIME SLOT</span>
+                                    <strong id="passTimeReadout">08:15 PM</strong>
+                                </div>
+                                <div class="pass-spec">
+                                    <span class="p-label">TABLE FOR</span>
+                                    <strong id="passGuestsReadout">4 Guests</strong>
+                                </div>
+                                <div class="pass-spec">
+                                    <span class="p-label">GUEST NAME</span>
+                                    <strong id="passNameReadout">Your Table</strong>
+                                </div>
+                            </div>
+
+                            <div class="pass-footer-bar">
+                                <div class="pass-barcode" aria-hidden="true"></div>
+                                <div class="pass-foot-meta">
+                                    <span>RAJPATH RANGOLI RD, BODAKDEV</span>
+                                    <span id="passRefCode">REF #KM-2700K</span>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Clean Editorial Footer -->
+   <!-- Clean Editorial Footer + Out-of-the-Box @zyrac__ Interactive Colophon -->
     <footer class="site-footer">
         <div class="container footer-row">
-            <div>
+            <div class="footer-brand-info">
                 <strong>KOMO BY KAFFA</strong>
                 <span>— Rajpath Rangoli Rd, Bodakdev, Ahmedabad 380059</span>
             </div>
             <div class="footer-right">
-                <a href="#home">Back to Top ↑</a>
+                <a href="tel:09925076666" class="footer-tel">099250 76666</a>
+                <a href="#home" class="footer-top-btn">Back to Top ↑</a>
             </div>
         </div>
-    </footer>
 
+      
+    </footer>
     <!-- Fullscreen Lightbox Modal -->
     <div class="lightbox-modal" id="lightboxModal" aria-hidden="true">
         <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>

@@ -1,42 +1,67 @@
-document.addEventListener("DOMContentLoaded", () => {
-    gsap.registerPlugin(ScrollTrigger);
+/**
+ * ============================================================================
+ * KOMO by KAFFA — Master Interactive Architecture (script.js)
+ * Crafted by @zyrac__ | Zero-Glitch, 60FPS & Fully Responsive
+ * ============================================================================
+ * MODULES INCLUDED:
+ * 01. Core Utilities & Responsive Breakpoint Helpers
+ * 02. Zero-Glitch Sliding Navbar Pill, Scroll Progress & IST Clock
+ * 03. Sculpted Stone Monolith Logo (3D Tilt & 2700K Halo Tracking)
+ * 04. Mobile & Tablet Architectural Sheet Drawer
+ * 05. Minimalist Custom Cursor & Magnetic Buttons (Desktop Pointer Only)
+ * 06. Section 1: Hero Kinetic 5-Slice Accordion Deck & Video Controller
+ * 07. Section 2: 19-Item Interactive Menu & "Amdavadi Honesty Mode"
+ * 08. Section 3: Sculptural Atelier, Morphing Cutouts, 2700K Dimmer & Lightbox
+ * 09. Section 4: 12 PM – 1 AM Sanctuary Dial & 3D Sandstone Coaster Flipper
+ * 10. Section 5: Visual Sanctuary Booking, 7-Day Date Strip & Live Table Pass
+ * 11. Footer: @zyrac__ Studio Colophon Spotlight & GSAP Scroll Reveals
+ * ============================================================================
+ */
 
-   // =========================================================================
-    // 1. ZERO-GLITCH SLIDING NAVBAR PILL + SCROLL PROGRESS + COFFEE EMBLEM SPIN
-    // =========================================================================
+document.addEventListener("DOMContentLoaded", () => {
+    // Register GSAP ScrollTrigger safely
+    if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+        gsap.registerPlugin(ScrollTrigger);
+    }
+
+    // ========================================================================
+    // 01. CORE UTILITIES & RESPONSIVE HELPERS
+    // ========================================================================
+    const isFinePointer = () => window.matchMedia("(pointer: fine)").matches;
+    const isDesktop = () => window.innerWidth > 960;
+    const isTabletOrAbove = () => window.innerWidth > 768;
+
+
+    // ========================================================================
+    // 02. ZERO-GLITCH SLIDING NAVBAR PILL, SCROLL PROGRESS & IST CLOCK
+    // ========================================================================
     const siteHeader = document.getElementById("siteHeader");
     const navTrack = document.getElementById("navTrack");
     const navLinks = Array.from(document.querySelectorAll(".nav-link"));
     const mobileLinks = Array.from(document.querySelectorAll(".m-nav-link"));
     const navPill = document.getElementById("navPill");
     const navScrollProgress = document.getElementById("navScrollProgress");
-    const coffeeEmblem = document.querySelector(".coffee-emblem");
     const sections = Array.from(document.querySelectorAll(".page-section"));
 
-    // Mutex lock prevents IntersectionObserver from fighting click-initiated smooth scrolls
+    // Mutex lock prevents scroll-spy from jittering during click-initiated smooth scrolls
     let isClickScrolling = false;
     let scrollUnlockTimer = null;
 
     function syncNavPill(activeLink, animate = true) {
         if (!activeLink || !navPill || !navTrack) return;
 
-        // Use offsetLeft & offsetWidth relative to .nav-track (100% immune to scroll/transform glitches)
         const targetWidth = activeLink.offsetWidth;
         const targetLeft = activeLink.offsetLeft;
 
-        if (!animate) {
-            navPill.style.transition = "none";
-        } else {
-            navPill.style.transition =
-                "transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), width 0.36s cubic-bezier(0.22, 1, 0.36, 1)";
-        }
+        navPill.style.transition = animate
+            ? "transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), width 0.36s cubic-bezier(0.22, 1, 0.36, 1)"
+            : "none";
 
         navPill.style.width = `${targetWidth}px`;
         navPill.style.transform = `translate3d(${targetLeft}px, 0, 0)`;
 
         if (!animate) {
-            // Force reflow so subsequent transitions stay silky
-            void navPill.offsetWidth;
+            void navPill.offsetWidth; // Force reflow
             navPill.style.transition = "";
         }
     }
@@ -54,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Initialize position immediately + after Google Fonts finish rendering
+    // Initialize Pill on DOM Ready & after Google Fonts finish loading
     const initialActive = document.querySelector(".nav-link.active") || navLinks[0];
     syncNavPill(initialActive, false);
 
@@ -65,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Keep pill pixel-accurate on any window or track resize
+    // Recalculate pill geometry automatically on any viewport/container resize
     if (typeof ResizeObserver !== "undefined" && navTrack) {
         const trackObserver = new ResizeObserver(() => {
             const current = document.querySelector(".nav-link.active") || navLinks[0];
@@ -74,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         trackObserver.observe(navTrack);
     }
 
-    // Click handler with scroll-lock mutex so the pill glides straight to the clicked tab
+    // Desktop Navbar Click Handler with Scroll-Lock Mutex
     navLinks.forEach((link) => {
         link.addEventListener("click", (e) => {
             const sectionId = link.dataset.section;
@@ -91,35 +116,29 @@ document.addEventListener("DOMContentLoaded", () => {
             const targetY = targetSection.getBoundingClientRect().top + window.scrollY - headerOffset;
             window.scrollTo({ top: targetY, behavior: "smooth" });
 
-            // Release mutex once smooth scroll settles
             scrollUnlockTimer = setTimeout(() => {
                 isClickScrolling = false;
             }, 850);
         });
     });
 
-    // Scroll-Spy via RAF-throttled scroll listener (more deterministic than multi-threshold IntersectionObserver)
+    // 60FPS RAF-Throttled Scroll Spy & Progress Hairline
     let scrollTicking = false;
     function onWindowScroll() {
         const scrollY = window.scrollY;
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         const progress = docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0;
 
-        // 1. Compact header state & 1px espresso progress bar
-        siteHeader.classList.toggle("is-compact", scrollY > 40);
+        if (siteHeader) {
+            siteHeader.classList.toggle("is-compact", scrollY > 40);
+        }
         if (navScrollProgress) {
             navScrollProgress.style.transform = `scaleX(${progress})`;
         }
 
-        // 2. Subtle coffee bean emblem rotation synced with scroll
-        if (coffeeEmblem) {
-            coffeeEmblem.style.transform = `rotate(${scrollY * 0.08}deg)`;
-        }
-
-        // 3. Determine active section if not currently locked by a click scroll
-        if (!isClickScrolling) {
-            const triggerPoint = scrollY + window.innerHeight * 0.32;
-            let currentSectionId = sections[0]?.id || "home";
+        if (!isClickScrolling && sections.length) {
+            const triggerPoint = scrollY + window.innerHeight * 0.34;
+            let currentSectionId = sections[0].id;
 
             for (const sec of sections) {
                 if (sec.offsetTop <= triggerPoint) {
@@ -143,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { passive: true }
     );
 
-    // Live Ahmedabad (IST) Store Status & Clock inside Navbar
+    // Live Ahmedabad (IST) Store Status & Clock
     function updateAhmedabadClock() {
         const clockEl = document.getElementById("amdavadClock");
         const dotEl = document.getElementById("storeStatusDot");
@@ -153,8 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const now = new Date();
             const istTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
             const hours = istTime.getHours();
-            // KOMO is open from 11:00 AM until 1:00 AM daily
-            const isOpen = hours >= 11 || hours < 1;
+            const isOpen = hours >= 11 || hours < 1; // 11:00 AM to 01:00 AM
             const timeStr = istTime.toLocaleTimeString("en-IN", {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -166,21 +184,52 @@ document.addEventListener("DOMContentLoaded", () => {
                 : `AMD ${timeStr} · Opens 11 AM`;
 
             if (dotEl) dotEl.classList.toggle("closed", !isOpen);
-        } catch (err) {
+        } catch (_) {
             clockEl.textContent = "AMD · Open til 1 AM";
         }
     }
     updateAhmedabadClock();
     setInterval(updateAhmedabadClock, 30000);
 
-    // =========================================================================
-    // 2. MOBILE & TABLET ARCHITECTURAL DRAWER (WITH BACKDROP & ESC KEY)
-    // =========================================================================
+
+    // ========================================================================
+    // 03. SCULPTED STONE MONOLITH LOGO (3D TILT & 2700K HALO TRACKING)
+    // ========================================================================
+    const komoStoneLogo = document.getElementById("komoStoneLogo");
+    const stoneBoulder = komoStoneLogo?.querySelector(".stone-boulder");
+
+    if (komoStoneLogo && stoneBoulder) {
+        komoStoneLogo.addEventListener("mousemove", (e) => {
+            if (!isFinePointer()) return;
+            const rect = stoneBoulder.getBoundingClientRect();
+            const relX = ((e.clientX - rect.left) / rect.width) * 100;
+            const relY = ((e.clientY - rect.top) / rect.height) * 100;
+
+            stoneBoulder.style.setProperty("--halo-x", `${relX.toFixed(1)}%`);
+            stoneBoulder.style.setProperty("--halo-y", `${relY.toFixed(1)}%`);
+
+            const tiltY = ((e.clientX - rect.left) / rect.width - 0.5) * 14;
+            const tiltX = ((e.clientY - rect.top) / rect.height - 0.5) * -14;
+            stoneBoulder.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03)`;
+        });
+
+        komoStoneLogo.addEventListener("mouseleave", () => {
+            stoneBoulder.style.setProperty("--halo-x", "50%");
+            stoneBoulder.style.setProperty("--halo-y", "50%");
+            stoneBoulder.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+        });
+    }
+
+
+    // ========================================================================
+    // 04. MOBILE & TABLET ARCHITECTURAL SHEET DRAWER
+    // ========================================================================
     const menuToggle = document.getElementById("menuToggle");
     const mobileMenu = document.getElementById("mobileMenu");
     const mobileBackdrop = document.getElementById("mobileBackdrop");
 
     function toggleMobileMenu(forceState) {
+        if (!menuToggle || !mobileMenu) return;
         const shouldOpen =
             typeof forceState === "boolean"
                 ? forceState
@@ -193,12 +242,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = shouldOpen ? "hidden" : "";
     }
 
-    if (menuToggle) {
-        menuToggle.addEventListener("click", () => toggleMobileMenu());
-    }
-    if (mobileBackdrop) {
-        mobileBackdrop.addEventListener("click", () => toggleMobileMenu(false));
-    }
+    menuToggle?.addEventListener("click", () => toggleMobileMenu());
+    mobileBackdrop?.addEventListener("click", () => toggleMobileMenu(false));
 
     mobileLinks.forEach((mLink) => {
         mLink.addEventListener("click", (e) => {
@@ -208,73 +253,95 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (targetSection) {
                 e.preventDefault();
+                isClickScrolling = true;
+                clearTimeout(scrollUnlockTimer);
                 setActiveSection(sectionId, true);
+
                 const targetY = targetSection.getBoundingClientRect().top + window.scrollY - 76;
                 window.scrollTo({ top: targetY, behavior: "smooth" });
+
+                scrollUnlockTimer = setTimeout(() => {
+                    isClickScrolling = false;
+                }, 850);
             }
         });
     });
 
     window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && mobileMenu.classList.contains("open")) {
+        if (e.key === "Escape" && mobileMenu?.classList.contains("open")) {
             toggleMobileMenu(false);
         }
     });
 
-    // =========================================================================
-    // 3. MINIMALIST ARCHITECTURAL CURSOR & MAGNETIC BUTTONS
-    // =========================================================================
+
+    // ========================================================================
+    // 05. MINIMALIST CUSTOM CURSOR & MAGNETIC BUTTONS (DESKTOP POINTER ONLY)
+    // ========================================================================
     const customCursor = document.getElementById("customCursor");
     const cursorText = document.getElementById("cursorText");
 
-    window.addEventListener("mousemove", (e) => {
-        gsap.to(customCursor, { x: e.clientX, y: e.clientY, duration: 0.12, ease: "power2.out" });
+    if (customCursor && typeof gsap !== "undefined" && isFinePointer()) {
+        const xTo = gsap.quickTo(customCursor, "x", { duration: 0.14, ease: "power3.out" });
+        const yTo = gsap.quickTo(customCursor, "y", { duration: 0.14, ease: "power3.out" });
+
+        window.addEventListener("mousemove", (e) => {
+            xTo(e.clientX);
+            yTo(e.clientY);
+        }, { passive: true });
+    }
+
+    // Event delegation so dynamically created elements (like menu cards) automatically trigger cursor states
+    document.addEventListener("mouseover", (e) => {
+        if (!isFinePointer() || !customCursor || !cursorText) return;
+        const target = e.target.closest("[data-cursor]");
+        if (target) {
+            cursorText.textContent = target.dataset.cursor || "";
+            customCursor.classList.add("active");
+        }
     });
 
-    function bindCursorTargets() {
-        document.querySelectorAll("[data-cursor]").forEach((el) => {
-            el.addEventListener("mouseenter", () => {
-                cursorText.textContent = el.dataset.cursor;
-                customCursor.classList.add("active");
-            });
-            el.addEventListener("mouseleave", () => {
-                cursorText.textContent = "";
-                customCursor.classList.remove("active");
-            });
-        });
-    }
-    bindCursorTargets();
+    document.addEventListener("mouseout", (e) => {
+        if (!isFinePointer() || !customCursor || !cursorText) return;
+        const target = e.target.closest("[data-cursor]");
+        if (target) {
+            cursorText.textContent = "";
+            customCursor.classList.remove("active");
+        }
+    });
 
+    // Magnetic Button Pull
     document.querySelectorAll(".magnetic").forEach((btn) => {
         btn.addEventListener("mousemove", (e) => {
+            if (!isFinePointer() || typeof gsap === "undefined") return;
             const rect = btn.getBoundingClientRect();
-            const x = (e.clientX - rect.left - rect.width / 2) * 0.2;
-            const y = (e.clientY - rect.top - rect.height / 2) * 0.2;
-            gsap.to(btn, { x, y, duration: 0.25 });
+            const x = (e.clientX - rect.left - rect.width / 2) * 0.22;
+            const y = (e.clientY - rect.top - rect.height / 2) * 0.22;
+            gsap.to(btn, { x, y, duration: 0.25, ease: "power2.out" });
         });
         btn.addEventListener("mouseleave", () => {
-            gsap.to(btn, { x: 0, y: 0, duration: 0.4, ease: "power2.out" });
+            if (typeof gsap === "undefined") return;
+            gsap.to(btn, { x: 0, y: 0, duration: 0.45, ease: "power2.out" });
         });
     });
 
-    // =========================================================================
-    // 4. HERO KINETIC ACCORDION DECK (HOVER / TAP TO EXPAND + VIDEO PLAYBACK)
-    // =========================================================================
-    const deckSlices = document.querySelectorAll(".deck-slice");
+
+    // ========================================================================
+    // 06. SECTION 1: HERO KINETIC 5-SLICE ACCORDION DECK & VIDEO CONTROLLER
+    // ========================================================================
+    const deckSlices = Array.from(document.querySelectorAll(".deck-slice"));
     const cafeReelVideo = document.getElementById("cafeReelVideo");
     const videoSoundBtn = document.getElementById("videoSoundBtn");
 
-    // Ensure the video starts playing immediately on load
     if (cafeReelVideo) {
         cafeReelVideo.play().catch(() => {});
     }
 
-    function activateSlice(slice) {
+    function activateHeroSlice(targetSlice) {
+        if (!targetSlice) return;
         deckSlices.forEach((s) => s.classList.remove("active"));
-        slice.classList.add("active");
+        targetSlice.classList.add("active");
 
-        // Keep video playing when active, pause when collapsed to save battery
-        const hasVideo = slice.querySelector("video");
+        const hasVideo = targetSlice.querySelector("video");
         if (hasVideo && cafeReelVideo) {
             cafeReelVideo.play().catch(() => {});
         } else if (cafeReelVideo) {
@@ -283,15 +350,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     deckSlices.forEach((slice) => {
-        // Desktop: Smooth expand on hover
         slice.addEventListener("mouseenter", () => {
-            if (window.innerWidth > 768) activateSlice(slice);
+            if (isTabletOrAbove() && isFinePointer()) {
+                activateHeroSlice(slice);
+            }
         });
-        // Mobile, Tablet & Desktop: Expand on tap/click
-        slice.addEventListener("click", () => activateSlice(slice));
+        slice.addEventListener("click", () => {
+            activateHeroSlice(slice);
+        });
     });
 
-    // Optional Mute/Unmute Pill inside the Video Slice
     if (videoSoundBtn && cafeReelVideo) {
         videoSoundBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -299,9 +367,11 @@ document.addEventListener("DOMContentLoaded", () => {
             videoSoundBtn.textContent = cafeReelVideo.muted ? "Muted" : "Sound On";
         });
     }
-    // =========================================================================
-    // 5. 19-ITEM INTERACTIVE MENU + "AMDAVADI HONESTY MODE" MEME TRANSLATOR
-    // =========================================================================
+
+
+    // ========================================================================
+    // 07. SECTION 2: 19-ITEM INTERACTIVE MENU & "AMDAVADI HONESTY MODE"
+    // ========================================================================
     const menuCatalog = [
         // Popular (6)
         { title: "Mezze Platter", price: "₹890", cat: "popular", badge: "Most Ordered", desc: "House truffle hummus, smoky muhammara, crisp herb falafel, pickled olives & warm wood-fired pita.", meme: "Ordered ‘for the table’ so everyone feels healthy before demolishing a Fondue pot.", img: "https://images.unsplash.com/photo-1541514321650-3ce48eb909bc?auto=format&fit=crop&q=80&w=900" },
@@ -313,7 +383,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Dimsum & Bao (3)
         { title: "Chilli Cheese Dimsum", price: "₹540", cat: "dimsum", badge: "Popular", desc: "Steamed translucent dumplings packed with spicy molten cheese & house chili oil.", meme: "Disappears from the bamboo steamer in 12 seconds flat.", img: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=900" },
-        { title: "Edamame Truffle Dimsum", price: "₹590", cat: "dimsum", badge: "Popular", desc: "Delicate crystal skin piped with whipped edamame and black truffle aroma.", meme: "Tastes like luxury, pronouncing it correctly earns you +10 Bodakdev points.", img: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80&w=900" },
+        { title: "Edamame Truffle Dimsum", price: "₹590", cat: "dimsum", badge: "Popular", desc: "Delicate crystal skin piped with whipped edamame and black truffle aroma.", meme: "Tastes like luxury; pronouncing it correctly earns you +10 Bodakdev points.", img: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80&w=900" },
         { title: "Sweet Chilli Cottage Cheese Bao", price: "₹510", cat: "dimsum", badge: "Fluffy Bao", desc: "Cloud-soft lotus leaf buns stuffed with crispy glazed paneer, scallions & sesame.", meme: "Paneer Chilli upgraded with a passport and a first-class ticket.", img: "https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&q=80&w=900" },
 
         // Bistro & Mains (7)
@@ -351,16 +421,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const memeModeToggle = document.getElementById("memeModeToggle");
     const memeStatusText = document.getElementById("memeStatusText");
 
-    function updateInspector(item) {
-        inspectImg.src = item.img;
-        inspectBadge.textContent = item.badge;
-        inspectTitle.textContent = item.title;
-        inspectPrice.textContent = item.price;
-        inspectDesc.textContent = item.desc;
-        inspectMemeText.textContent = `“${item.meme}”`;
+    function updateMenuInspector(item) {
+        if (!item) return;
+        if (inspectImg) inspectImg.src = item.img;
+        if (inspectBadge) inspectBadge.textContent = item.badge;
+        if (inspectTitle) inspectTitle.textContent = item.title;
+        if (inspectPrice) inspectPrice.textContent = item.price;
+        if (inspectDesc) inspectDesc.textContent = item.desc;
+        if (inspectMemeText) inspectMemeText.textContent = `“${item.meme}”`;
     }
 
-    function renderMenu(cat) {
+    function renderMenuCards(cat) {
+        if (!menuCardsGrid) return;
         menuCardsGrid.innerHTML = "";
         const items = menuCatalog.filter((i) => i.cat === cat);
 
@@ -376,43 +448,45 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p class="m-card-sub">${isMemeMode ? "💬 " + item.meme : item.desc}</p>
             `;
 
-            const selectDish = () => {
-                document.querySelectorAll(".menu-item-card").forEach((c) => c.classList.remove("selected"));
+            const handleSelect = () => {
+                menuCardsGrid.querySelectorAll(".menu-item-card").forEach((c) => c.classList.remove("selected"));
                 card.classList.add("selected");
-                updateInspector(item);
+                updateMenuInspector(item);
             };
-            card.addEventListener("mouseenter", selectDish);
-            card.addEventListener("click", selectDish);
+
+            card.addEventListener("mouseenter", () => {
+                if (isFinePointer()) handleSelect();
+            });
+            card.addEventListener("click", handleSelect);
             menuCardsGrid.appendChild(card);
         });
 
-        if (items[0]) updateInspector(items[0]);
-        bindCursorTargets();
+        if (items[0]) updateMenuInspector(items[0]);
     }
 
-    renderMenu(activeCategory);
+    renderMenuCards(activeCategory);
 
     document.querySelectorAll(".cat-tab").forEach((tab) => {
         tab.addEventListener("click", () => {
             document.querySelectorAll(".cat-tab").forEach((t) => t.classList.remove("active"));
             tab.classList.add("active");
             activeCategory = tab.dataset.cat;
-            renderMenu(activeCategory);
+            renderMenuCards(activeCategory);
         });
     });
 
-    // Amdavadi Meme Mode Toggle
-    memeModeToggle.addEventListener("click", () => {
+    memeModeToggle?.addEventListener("click", () => {
         isMemeMode = !isMemeMode;
         memeModeToggle.classList.toggle("active", isMemeMode);
-        memeModeToggle.setAttribute("aria-pressed", isMemeMode);
-        memeStatusText.textContent = isMemeMode ? "ON" : "OFF";
-        renderMenu(activeCategory);
+        memeModeToggle.setAttribute("aria-pressed", String(isMemeMode));
+        if (memeStatusText) memeStatusText.textContent = isMemeMode ? "ON" : "OFF";
+        renderMenuCards(activeCategory);
     });
 
-   // =========================================================================
-    // 6. SCULPTURAL ATELIER: MORPHING ALCOVE CUTOUT + 2700K COVE LIGHT DIMMER
-    // =========================================================================
+
+    // ========================================================================
+    // 08. SECTION 3: SCULPTURAL ATELIER, MORPHING CUTOUTS, DIMMER & LIGHTBOX
+    // ========================================================================
     const atelier = document.getElementById("sculpturalAtelier");
     const specimenRows = Array.from(document.querySelectorAll(".specimen-row"));
     const filmThumbs = Array.from(document.querySelectorAll(".film-thumb"));
@@ -426,6 +500,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const coveLightSlider = document.getElementById("coveLightSlider");
     const kelvinReadout = document.getElementById("kelvinReadout");
 
+    const lightboxModal = document.getElementById("lightboxModal");
+    const lightboxImage = document.getElementById("lightboxImage");
+    const lightboxCaption = document.getElementById("lightboxCaption");
+    const lightboxClose = document.getElementById("lightboxClose");
+
     let currentSpecIdx = 0;
 
     function selectSpecimen(index) {
@@ -436,12 +515,10 @@ document.addEventListener("DOMContentLoaded", () => {
         specimenRows.forEach((r, i) => r.classList.toggle("active", i === currentSpecIdx));
         filmThumbs.forEach((t, i) => t.classList.toggle("active", i === currentSpecIdx));
 
-        // Morph the carved plaster cutout silhouette organically
         if (carvedWindowWell && row.dataset.shape) {
             carvedWindowWell.style.borderRadius = row.dataset.shape;
         }
 
-        // Cross-fade the local folder photo with fallback protection
         if (alcoveMainImg) {
             alcoveMainImg.style.opacity = "0.25";
             setTimeout(() => {
@@ -450,19 +527,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 };
                 alcoveMainImg.src = row.dataset.src;
                 alcoveMainImg.style.opacity = "1";
-            }, 140);
+            }, 130);
         }
 
-        if (alcoveCode) alcoveCode.textContent = row.dataset.code;
-        if (alcoveMaterialText) alcoveMaterialText.textContent = row.dataset.material;
-        if (alcoveSwatchDot) alcoveSwatchDot.style.background = row.dataset.swatch;
-        if (alcoveTitle) alcoveTitle.textContent = row.dataset.title;
-        if (alcoveNote) alcoveNote.textContent = row.dataset.note;
+        if (alcoveCode) alcoveCode.textContent = row.dataset.code || "";
+        if (alcoveMaterialText) alcoveMaterialText.textContent = row.dataset.material || "";
+        if (alcoveSwatchDot) alcoveSwatchDot.style.background = row.dataset.swatch || "#D9CBB8";
+        if (alcoveTitle) alcoveTitle.textContent = row.dataset.title || "";
+        if (alcoveNote) alcoveNote.textContent = row.dataset.note || "";
     }
 
     specimenRows.forEach((row, idx) => {
         row.addEventListener("mouseenter", () => {
-            if (window.innerWidth > 960) selectSpecimen(idx);
+            if (isDesktop() && isFinePointer()) selectSpecimen(idx);
         });
         row.addEventListener("click", () => selectSpecimen(idx));
     });
@@ -484,18 +561,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const val = Number(e.target.value);
             const alpha = (val / 100).toFixed(2);
             atelier.style.setProperty("--cove-alpha", alpha);
-            if (kelvinReadout) {
-                kelvinReadout.textContent = `2700K · ${val}%`;
-            }
+            if (kelvinReadout) kelvinReadout.textContent = `2700K · ${val}%`;
             if (alcoveMainImg) {
-                alcoveMainImg.style.filter = `brightness(${0.8 + (val / 100) * 0.25})`;
+                alcoveMainImg.style.filter = `brightness(${(0.8 + (val / 100) * 0.25).toFixed(2)})`;
             }
         });
     }
 
-    // Subtle 3D Sculptural Parallax on the Carved Window Well
+    // 3D Sculptural Parallax on Carved Window Well (Desktop Only)
     if (carvedWindowWell) {
         carvedWindowWell.addEventListener("mousemove", (e) => {
+            if (!isFinePointer()) return;
             const rect = carvedWindowWell.getBoundingClientRect();
             const rotY = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
             const rotX = ((e.clientY - rect.top) / rect.height - 0.5) * -8;
@@ -506,127 +582,306 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Fullscreen Lightbox Trigger when clicking the Carved Alcove Window
-    const lightboxModal = document.getElementById("lightboxModal");
-    const lightboxImage = document.getElementById("lightboxImage");
-    const lightboxCaption = document.getElementById("lightboxCaption");
-
-    function openAlcoveLightbox() {
-        if (!lightboxModal || !alcoveMainImg) return;
-        lightboxImage.src = alcoveMainImg.src;
-        lightboxCaption.textContent = `${alcoveCode?.textContent || ""} — ${alcoveTitle?.textContent || ""}: ${alcoveNote?.textContent || ""}`;
+    // Unified Lightbox Controller
+    function openLightbox(src, caption) {
+        if (!lightboxModal || !lightboxImage) return;
+        lightboxImage.src = src;
+        if (lightboxCaption) lightboxCaption.textContent = caption || "";
         lightboxModal.classList.add("open");
+        lightboxModal.setAttribute("aria-hidden", "false");
     }
 
-    carvedWindowWell?.addEventListener("click", openAlcoveLightbox);
-    document.getElementById("lightboxClose")?.addEventListener("click", () => {
+    function closeLightbox() {
+        if (!lightboxModal) return;
         lightboxModal.classList.remove("open");
+        lightboxModal.setAttribute("aria-hidden", "true");
+    }
+
+    carvedWindowWell?.addEventListener("click", () => {
+        if (!alcoveMainImg) return;
+        const cap = `${alcoveCode?.textContent || ""} — ${alcoveTitle?.textContent || ""}: ${alcoveNote?.textContent || ""}`;
+        openLightbox(alcoveMainImg.src, cap);
     });
+
+    lightboxClose?.addEventListener("click", closeLightbox);
     lightboxModal?.addEventListener("click", (e) => {
-        if (e.target === lightboxModal) lightboxModal.classList.remove("open");
+        if (e.target === lightboxModal) closeLightbox();
     });
-    // =========================================================================
-    // 7. STORY CHAPTER TABS & RESERVATION LIVE BILL ESTIMATOR
-    // =========================================================================
-    document.querySelectorAll(".chapter-item").forEach((chap) => {
-        chap.addEventListener("click", () => {
-            document.querySelectorAll(".chapter-item").forEach((c) => c.classList.remove("active"));
-            chap.classList.add("active");
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && lightboxModal?.classList.contains("open")) {
+            closeLightbox();
+        }
+    });
+
+
+    // ========================================================================
+    // 09. SECTION 4: 12 PM – 1 AM SANCTUARY DIAL & 3D COASTER FLIPPER
+    // ========================================================================
+    const dialBtns = Array.from(document.querySelectorAll(".dial-btn"));
+    const chronicleImg = document.getElementById("chronicleImg");
+    const chronicleTimeBadge = document.getElementById("chronicleTimeBadge");
+    const chronicleTag = document.getElementById("chronicleTag");
+    const chronicleHeadline = document.getElementById("chronicleHeadline");
+    const chronicleOrder = document.getElementById("chronicleOrder");
+
+    dialBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            dialBtns.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            if (chronicleImg) {
+                chronicleImg.style.opacity = "0.28";
+                setTimeout(() => {
+                    chronicleImg.onerror = () => {
+                        if (btn.dataset.fallback) chronicleImg.src = btn.dataset.fallback;
+                    };
+                    chronicleImg.src = btn.dataset.img;
+                    chronicleImg.style.opacity = "1";
+                }, 130);
+            }
+
+            if (chronicleTimeBadge) chronicleTimeBadge.textContent = btn.dataset.time || "";
+            if (chronicleTag) chronicleTag.textContent = btn.dataset.tag || "";
+            if (chronicleHeadline) chronicleHeadline.textContent = btn.dataset.headline || "";
+            if (chronicleOrder) chronicleOrder.textContent = btn.dataset.order || "";
         });
     });
 
-    const partyBtns = document.querySelectorAll("#partySizeSelector .seg-opt");
-    const zoneBtns = document.querySelectorAll("#seatingZoneSelector .seg-opt");
-    const liveSpendEstimate = document.getElementById("liveSpendEstimate");
+    // 3D Sandstone Coaster Deck (Amdavadi Table Lore)
+    const coasterLoreData = [
+        {
+            tag: "#01 PARKING LORE",
+            quote: "“Your friend says <em>‘Bas 5 minute, Pakwan cross karyu.’</em> Order the Peri Peri Fries now—they are still hunting for parking behind Rajpath Club.”",
+            sub: "Verified by 99% of West Ahmedabad groups"
+        },
+        {
+            tag: "#02 POTTERY WALL RULE",
+            quote: "“If you didn’t take a portrait in front of the <em>backlit terracotta pottery alcove</em> or the sculpted stone KOMO sign, did you even visit Bodakdev?”",
+            sub: "2700K Cove Light = Zero Filter Needed"
+        },
+        {
+            tag: "#03 BISCOFF DIPLOMACY",
+            quote: "“Every table orders one <em>Lotus Biscoff Cheesecake</em> with four spoons, and within 40 seconds it turns into a polite cold war over the last crust bite.”",
+            sub: "Pro Tip: Just order two slices upfront"
+        },
+        {
+            tag: "#04 THE 11:30 PM DRIVE",
+            quote: "“Starts as a casual <em>‘chalo coffee piva’</em> drive; ends at 12:45 AM with a Wood-Fired Pizza, Truffle Dimsum, and three new startup ideas.”",
+            sub: "Open Daily Until 01:00 AM"
+        }
+    ];
 
-    partyBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            partyBtns.forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
-            const count = Number(btn.dataset.guests);
+    let coasterIdx = 0;
+    const activeCoasterCard = document.getElementById("activeCoasterCard");
+    const coasterDeckTrigger = document.getElementById("coasterDeckTrigger");
+    const coasterCounter = document.getElementById("coasterCounter");
+    const coasterTag = document.getElementById("coasterTag");
+    const coasterQuote = document.getElementById("coasterQuote");
+    const coasterSub = document.getElementById("coasterSub");
+    const coasterDots = Array.from(document.querySelectorAll(".c-dot"));
+
+    function showCoaster(nextIndex) {
+        if (!activeCoasterCard) return;
+        coasterIdx = (nextIndex + coasterLoreData.length) % coasterLoreData.length;
+        const item = coasterLoreData[coasterIdx];
+
+        activeCoasterCard.classList.add("flipping");
+        coasterDots.forEach((d, i) => d.classList.toggle("active", i === coasterIdx));
+
+        setTimeout(() => {
+            if (coasterCounter) coasterCounter.textContent = `COASTER 0${coasterIdx + 1} / 04`;
+            if (coasterTag) coasterTag.textContent = item.tag;
+            if (coasterQuote) coasterQuote.innerHTML = item.quote;
+            if (coasterSub) coasterSub.textContent = item.sub;
+            activeCoasterCard.classList.remove("flipping");
+        }, 170);
+    }
+
+    coasterDeckTrigger?.addEventListener("click", () => {
+        showCoaster(coasterIdx + 1);
+    });
+
+    coasterDots.forEach((dot, idx) => {
+        dot.addEventListener("click", (e) => {
+            e.stopPropagation();
+            showCoaster(idx);
+        });
+    });
+
+
+    // ========================================================================
+    // 10. SECTION 5: VISUAL SANCTUARY BOOKING, 7-DAY STRIP & LIVE TABLE PASS
+    // ========================================================================
+    const zoneCards = Array.from(document.querySelectorAll(".zone-visual-card"));
+    const guestPills = Array.from(document.querySelectorAll(".g-pill"));
+    const timeChips = Array.from(document.querySelectorAll(".time-chip"));
+    const dateRibbon = document.getElementById("customDateRibbon");
+    const hiddenDateInput = document.getElementById("guestDate");
+    const guestNameInput = document.getElementById("guestName");
+    const liveSpendEstimate = document.getElementById("liveSpendEstimate");
+    const zoneVibeHint = document.getElementById("zoneVibeHint");
+
+    const liveTablePass = document.getElementById("liveTablePass");
+    const passZoneBg = document.getElementById("passZoneBg");
+    const passZoneTitle = document.getElementById("passZoneTitle");
+    const passDateReadout = document.getElementById("passDateReadout");
+    const passTimeReadout = document.getElementById("passTimeReadout");
+    const passGuestsReadout = document.getElementById("passGuestsReadout");
+    const passNameReadout = document.getElementById("passNameReadout");
+    const passStatusBadge = document.getElementById("passStatusBadge");
+    const passRefCode = document.getElementById("passRefCode");
+
+    // 1. Dynamically Generate Next 7 Days in Touch Date Ribbon
+    if (dateRibbon) {
+        dateRibbon.innerHTML = "";
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const today = new Date();
+
+        for (let i = 0; i < 7; i++) {
+            const d = new Date(today);
+            d.setDate(today.getDate() + i);
+
+            const iso = d.toISOString().split("T")[0];
+            const dayLabel = i === 0 ? "Today" : i === 1 ? "Tmrw" : dayNames[d.getDay()];
+            const numLabel = d.getDate();
+            const monLabel = monthNames[d.getMonth()];
+            const passFormatted = `${dayLabel}, ${numLabel} ${monLabel}`;
+
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = `date-tile ${i === 0 ? "active" : ""}`;
+            btn.dataset.iso = iso;
+            btn.dataset.formatted = passFormatted;
+            btn.innerHTML = `
+                <span class="d-day">${dayLabel}</span>
+                <strong class="d-num">${numLabel}</strong>
+                <span class="d-mon">${monLabel}</span>
+            `;
+
+            if (i === 0 && hiddenDateInput) {
+                hiddenDateInput.value = iso;
+                if (passDateReadout) passDateReadout.textContent = passFormatted;
+            }
+
+            btn.addEventListener("click", () => {
+                dateRibbon.querySelectorAll(".date-tile").forEach((t) => t.classList.remove("active"));
+                btn.classList.add("active");
+                if (hiddenDateInput) hiddenDateInput.value = iso;
+                if (passDateReadout) passDateReadout.textContent = passFormatted;
+            });
+
+            dateRibbon.appendChild(btn);
+        }
+    }
+
+    // 2. Visual Space Cards -> Sync with Live Ticket Pass
+    zoneCards.forEach((card) => {
+        card.addEventListener("click", () => {
+            zoneCards.forEach((c) => c.classList.remove("active"));
+            card.classList.add("active");
+            if (passZoneTitle) passZoneTitle.textContent = card.dataset.zone || "";
+            if (zoneVibeHint) zoneVibeHint.textContent = card.dataset.vibe || "";
+            if (passZoneBg && card.dataset.img) {
+                passZoneBg.src = card.dataset.img;
+            }
+        });
+    });
+
+    // 3. Guest Count Pills -> Sync Spend Estimate & Pass Readout
+    guestPills.forEach((pill) => {
+        pill.addEventListener("click", () => {
+            guestPills.forEach((p) => p.classList.remove("active"));
+            pill.classList.add("active");
+            const count = Number(pill.dataset.guests) || 4;
             const min = (count * 800).toLocaleString("en-IN");
             const max = (count * 1400).toLocaleString("en-IN");
-            liveSpendEstimate.textContent = `₹${min} – ₹${max} est. for ${count} Guests (₹800–1,800/person)`;
+            if (liveSpendEstimate) liveSpendEstimate.textContent = `Est. ₹${min}–${max}`;
+            if (passGuestsReadout) passGuestsReadout.textContent = pill.textContent;
         });
     });
 
-    zoneBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            zoneBtns.forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
+    // 4. Time Chips -> Sync Pass Time Readout
+    timeChips.forEach((chip) => {
+        chip.addEventListener("click", () => {
+            timeChips.forEach((c) => c.classList.remove("active"));
+            chip.classList.add("active");
+            if (passTimeReadout) passTimeReadout.textContent = chip.dataset.time || "";
         });
     });
 
-    // Default Date to Today
-    const guestDate = document.getElementById("guestDate");
-    guestDate.valueAsDate = new Date();
-    guestDate.min = new Date().toISOString().split("T")[0];
+    // 5. Guest Name Input -> Live Ticket Engraving
+    guestNameInput?.addEventListener("input", (e) => {
+        const val = e.target.value.trim();
+        if (passNameReadout) {
+            passNameReadout.textContent = val || "Your Table";
+        }
+    });
 
+    // 6. Submit Reservation & Issue Confirmed Pass
     const reservationForm = document.getElementById("reservationForm");
-    const reservationFeedback = document.getElementById("reservationFeedback");
-
-    reservationForm.addEventListener("submit", (e) => {
+    reservationForm?.addEventListener("submit", (e) => {
         e.preventDefault();
         if (!reservationForm.checkValidity()) {
             reservationForm.reportValidity();
             return;
         }
 
-        const name = document.getElementById("guestName").value;
-        const guests = document.querySelector("#partySizeSelector .active").textContent;
-        const zone = document.querySelector("#seatingZoneSelector .active").dataset.zone;
-        const timeSel = document.getElementById("guestTime");
-        const timeText = timeSel.options[timeSel.selectedIndex].text;
         const btnLabel = document.getElementById("submitBtnLabel");
+        const randomRef = `REF #KM-${Math.floor(1000 + Math.random() * 9000)}`;
 
-        btnLabel.textContent = "Confirming Table...";
+        if (btnLabel) btnLabel.textContent = "Minting Your Table Pass...";
+
         setTimeout(() => {
-            btnLabel.textContent = "Confirm Table Request";
-            document.getElementById("feedbackTitle").textContent = `Reserved for ${name} (${guests})`;
-            document.getElementById("feedbackDetails").textContent = `${zone} · ${timeText} · Rajpath Rangoli Rd`;
-            reservationFeedback.classList.add("show");
-            reservationForm.reset();
-            guestDate.valueAsDate = new Date();
-        }, 600);
+            if (btnLabel) btnLabel.textContent = "Pass Issued ✓ (Reserved)";
+            if (liveTablePass) liveTablePass.classList.add("confirmed");
+            if (passStatusBadge) passStatusBadge.textContent = "CONFIRMED PASS";
+            if (passRefCode) passRefCode.textContent = randomRef;
+
+            if (!isDesktop() && liveTablePass) {
+                liveTablePass.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        }, 450);
     });
 
-    // Subtle Scroll Reveal
-    gsap.utils.toArray(".reveal-item").forEach((el) => {
-        gsap.from(el, {
-            scrollTrigger: { trigger: el, start: "top 88%" },
-            y: 22,
-            opacity: 0,
-            duration: 0.75,
-            ease: "power2.out"
-        });
-    });
 
-    // =========================================================================
-    // SCULPTED STONE LOGO: 3D TILT & INTERACTIVE LED HALO LIGHT TRACKING
-    // =========================================================================
-    const komoStoneLogo = document.getElementById("komoStoneLogo");
-    const stoneBoulder = komoStoneLogo?.querySelector(".stone-boulder");
+    // ========================================================================
+    // 11. FOOTER: @zyrac__ COLOPHON SPOTLIGHT & GSAP SCROLL REVEALS
+    // ========================================================================
+    const zyracColophon = document.getElementById("zyracColophon");
 
-    if (komoStoneLogo && stoneBoulder) {
-        komoStoneLogo.addEventListener("mousemove", (e) => {
-            const rect = stoneBoulder.getBoundingClientRect();
-            const relX = ((e.clientX - rect.left) / rect.width) * 100;
-            const relY = ((e.clientY - rect.top) / rect.height) * 100;
+    if (zyracColophon) {
+        const updateZyracSpotlight = (clientX, clientY) => {
+            const rect = zyracColophon.getBoundingClientRect();
+            zyracColophon.style.setProperty("--zx", `${(clientX - rect.left).toFixed(0)}px`);
+            zyracColophon.style.setProperty("--zy", `${(clientY - rect.top).toFixed(0)}px`);
+        };
 
-            // Shift the internal 2700K backlight glow toward the cursor
-            stoneBoulder.style.setProperty("--halo-x", `${relX.toFixed(1)}%`);
-            stoneBoulder.style.setProperty("--halo-y", `${relY.toFixed(1)}%`);
+        zyracColophon.addEventListener("mousemove", (e) => {
+            updateZyracSpotlight(e.clientX, e.clientY);
+        }, { passive: true });
 
-            // Subtle 3D sculptural tilt
-            const tiltY = ((e.clientX - rect.left) / rect.width - 0.5) * 14;
-            const tiltX = ((e.clientY - rect.top) / rect.height - 0.5) * -14;
-            stoneBoulder.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03)`;
-        });
+        zyracColophon.addEventListener("touchmove", (e) => {
+            if (e.touches[0]) {
+                updateZyracSpotlight(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+    }
 
-        komoStoneLogo.addEventListener("mouseleave", () => {
-            stoneBoulder.style.setProperty("--halo-x", "50%");
-            stoneBoulder.style.setProperty("--halo-y", "50%");
-            stoneBoulder.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+    // Gentle Hardware-Accelerated Scroll Reveal for Section Blocks
+    if (typeof gsap !== "undefined") {
+        gsap.utils.toArray(".reveal-item").forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 88%",
+                    once: true
+                },
+                y: 20,
+                opacity: 0,
+                duration: 0.7,
+                ease: "power2.out"
+            });
         });
     }
 });
