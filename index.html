@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Add this inside <head> for the exact chiseled KOMO serif proportions -->
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">    
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -43,20 +43,94 @@
          ================================================================= -->
     <header class="site-header" id="siteHeader">
         <div class="header-inner">
-            <!-- Sculpted Backlit Stone Boulder Logo -->
-            <a href="#home" class="komo-stone-logo" id="komoStoneLogo" data-cursor="Home" aria-label="KOMO by Kaffa Home">
-                <div class="stone-boulder">
-                    <!-- Rough Stone Grain Layer -->
-                    <span class="stone-crag-texture" aria-hidden="true"></span>
-                    <!-- Recessed Cavity with Warm 2700K Backlight -->
-                    <div class="stone-recess-cavity">
-                        <span class="cavity-halo" id="cavityHalo" aria-hidden="true"></span>
-                        <span class="komo-metal-letters" data-text="KOMO">KOMO</span>
-                    </div>
-                </div>
-                <span class="kaffa-side-tag">BY KAFFA</span>
-            </a>
+           <!-- 100% Code-Crafted KOMO Sculpted Stone Monolith Logo (Zero Image Files) -->
+            <a href="#home" class="komo- crafted-logo" id="komoStoneLogo" data-cursor="Home" aria-label="KOMO by KAFFA Home">
+                <div class="monolith-boulder-wrap" id="monolithBoulder">
+                    <!-- Procedural SVG Chiseled Travertine Stone & Recessed Halo Cavity -->
+                    <svg class="monolith-svg" viewBox="0 0 260 104" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <defs>
+                            <!-- Real-Time Procedural Pitted Travertine / Sandstone Relief Filter -->
+                            <filter id="travertineCrag" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+                                <!-- Coarse boulder pits + fine sand grain -->
+                                <feTurbulence type="fractalNoise" baseFrequency="0.045 0.055" numOctaves="5" seed="14" result="cragNoise"/>
+                                <!-- 3D Chiseled Stone Lighting from Warm Cove Lamp -->
+                                <feDiffuseLighting in="cragNoise" lighting-color="#D7C0A3" surfaceScale="3.2" diffuseConstant="1.05" result="stoneRelief">
+                                    <feDistantLight id="svgStoneLight" azimuth="235" elevation="48"/>
+                                </feDiffuseLighting>
+                                <!-- Dark porous stone crevices -->
+                                <feColorMatrix type="matrix" in="stoneRelief"
+                                    values="0.62 0    0    0 0.08
+                                            0    0.50 0    0 0.05
+                                            0    0    0.38 0 0.03
+                                            0    0    0    1 0" result="tintedStone"/>
+                                <!-- Clip strictly to the organic boulder path -->
+                                <feComposite in="tintedStone" in2="SourceGraphic" operator="in" result="clippedStone"/>
+                            </filter>
 
+                            <!-- Base 3D Stone Shadow & Rim Gradient -->
+                            <radialGradient id="boulderBaseGrad" cx="50%" cy="48%" r="54%">
+                                <stop offset="0%" stop-color="#8B7258"/>
+                                <stop offset="68%" stop-color="#5E4B39"/>
+                                <stop offset="92%" stop-color="#3D2F23"/>
+                                <stop offset="100%" stop-color="#271D15"/>
+                            </radialGradient>
+
+                            <!-- Recessed Inner Trench Shadow -->
+                            <radialGradient id="trenchDepthGrad" cx="50%" cy="50%" r="52%">
+                                <stop offset="0%" stop-color="#FFFDF8"/>
+                                <stop offset="45%" stop-color="#FFE4B5"/>
+                                <stop offset="76%" stop-color="#A88256"/>
+                                <stop offset="94%" stop-color="#4A3828"/>
+                                <stop offset="100%" stop-color="#2A1F16"/>
+                            </radialGradient>
+
+                            <!-- Warm 2700K LED Backlight Halo Blur -->
+                            <filter id="ledHaloBlur" x="-30%" y="-30%" width="160%" height="160%">
+                                <feGaussianBlur stdDeviation="5.5"/>
+                            </filter>
+                        </defs>
+
+                        <!-- 1. Outer Organic Hand-Sculpted Boulder Silhouette (Matches unnamed_2.webp) -->
+                        <path class="boulder-base-path"
+                              d="M28,22 C52,9 94,11 132,10 C172,9 216,12 236,27 C253,40 255,66 239,82 C221,98 178,95 134,96 C88,97 42,96 22,80 C5,66 7,34 28,22 Z"
+                              fill="url(#boulderBaseGrad)"/>
+
+                        <!-- 2. Procedural 3D Pitted Stone Texture Overlay -->
+                        <path d="M28,22 C52,9 94,11 132,10 C172,9 216,12 236,27 C253,40 255,66 239,82 C221,98 178,95 134,96 C88,97 42,96 22,80 C5,66 7,34 28,22 Z"
+                              fill="#8B7258"
+                              filter="url(#travertineCrag)"
+                              opacity="0.78"
+                              style="mix-blend-mode: hard-light;"/>
+
+                        <!-- 3. Outer Chiseled Bevel Rim Highlight (Bottom-Left Lamp Light) -->
+                        <path d="M28,22 C52,9 94,11 132,10 C172,9 216,12 236,27 C253,40 255,66 239,82 C221,98 178,95 134,96 C88,97 42,96 22,80 C5,66 7,34 28,22 Z"
+                              stroke="rgba(255, 232, 195, 0.32)"
+                              stroke-width="1.5"
+                              fill="none"/>
+
+                        <!-- 4. Deep Carved Inner Rectangular-Oval Cavity Trench -->
+                        <path d="M46,34 C72,28 188,28 214,34 C228,38 229,67 214,72 C188,78 72,78 46,72 C31,67 32,38 46,34 Z"
+                              fill="url(#trenchDepthGrad)"
+                              stroke="#2E2218"
+                              stroke-width="1.8"/>
+
+                        <!-- 5. Intense 2700K Warm LED Halo Spill Behind Letters -->
+                        <ellipse class="svg-halo-core" cx="130" cy="53" rx="84" ry="18"
+                                 fill="#FFF8E8"
+                                 filter="url(#ledHaloBlur)"
+                                 opacity="0.92"/>
+                    </svg>
+
+                    <!-- 6. Precision Backlit Brushed-Bronze "KOMO" Cutout Typography -->
+                    <span class="komo-sculpted-word" aria-hidden="true">KOMO</span>
+                </div>
+
+                <!-- Clean Architectural Subtitle Tag -->
+                <div class="kaffa-architect-tag">
+                    <span class="ka-top">BY KAFFA</span>
+                    <span class="ka-bot">BODAKDEV</span>
+                </div>
+            </a>
             <!-- Segmented Track with Zero-Glitch Sliding Pill -->
             <nav class="nav-track" id="navTrack" aria-label="Primary Navigation">
                 <span class="nav-highlight-pill" id="navPill" aria-hidden="true"></span>
@@ -615,185 +689,155 @@
                 </div>
             </div>
         </section>
-        <!-- =================================================================
-             SECTION 5: VISUAL SANCTUARY BOOKING & LIVE TABLE PASS (ZERO OVERFLOW)
+       <!-- =================================================================
+             SECTION 5: INTERACTIVE TABLE SOMMELIER & LIVE WALK-IN RADAR
+             (Replaces Reservation Form with a High-Conversion Client Showstopper)
              ================================================================= -->
-        <section id="contact" class="page-section contact-section" data-nav="contact">
+        <section id="contact" class="page-section concierge-section" data-nav="contact">
             <div class="container">
-                <div class="reserve-header-compact reveal-item">
+                <!-- Top Header Row -->
+                <div class="sommelier-header reveal-item">
                     <div>
-                        <span class="mono-label">05 / TABLE RESERVATIONS · BODAKDEV</span>
-                        <h2 class="section-heading">Claim Your Sanctuary.</h2>
+                        <span class="mono-label">05 / THE TABLE SOMMELIER & WALK-IN CONCIERGE</span>
+                        <h2 class="section-heading">No Forms. Just Walk In & Feast.</h2>
                     </div>
-                    <div class="quick-locate-pills">
-                        <a href="https://maps.google.com/?q=KOMO+by+KAFFA+Bodakdev+Ahmedabad" target="_blank" rel="noopener" class="locate-pill">
-                            <span> Behind Rajpath Club</span>
-                            <span>Maps ↗</span>
-                        </a>
-                        <a href="tel:09925076666" class="locate-pill">
-                            <span> 099250 76666</span>
-                        </a>
-                    </div>
+                    <p class="sommelier-sub">
+                        Not sure what to order when you sit under the vaults? Tap your table’s mood below to curate an instant 3-part KOMO pairing.
+                    </p>
                 </div>
 
-                <!-- Bespoke Visual Pass Builder (Replaces Boring AI Form) -->
-                <div class="sanctuary-pass-builder reveal-item">
+                <!-- Main Interactive Stage: Left Mood Curator + Right Live Walk-In & Location Monolith -->
+                <div class="sommelier-stage reveal-item">
 
-                    <!-- LEFT: Visual Zone Cards + Custom Touch-Friendly Date/Time Scrollers -->
-                    <div class="builder-controls-card">
-                        <form id="reservationForm" novalidate>
+                    <!-- LEFT: Interactive 3-Course Mood-to-Table Pairing Engine -->
+                    <div class="curator-engine-card">
+                        <div class="curator-top-bar">
+                            <span class="step-tag">SELECT YOUR TABLE’S VIBE TONIGHT</span>
+                            <span class="curator-price-tag" id="pairingEstTag">~₹930 / person</span>
+                        </div>
 
-                            <!-- Step 1: Visual Space Cards (Uses Your Real KOMO Photos) -->
-                            <div class="builder-step">
-                                <div class="step-label-row">
-                                    <span class="step-tag">01 / CHOOSE YOUR SPACE</span>
-                                    <span class="step-hint" id="zoneVibeHint">2700K Cove-Lit Main Vault</span>
-                                </div>
-
-                                <div class="visual-zone-grid" id="seatingZoneSelector">
-                                    <button type="button" class="zone-visual-card active" data-zone="Cave Vault Hall" data-vibe="2700K Cove-Lit Main Vault" data-img="komologo2.webp">
-                                        <img src="komologo2.webp" onerror="this.src='momo.webp'" alt="Cave Vault Hall">
-                                        <div class="zone-card-shade">
-                                            <span class="zone-check">✓</span>
-                                            <div>
-                                                <strong>Cave Vaults</strong>
-                                                <small>Main Arch Hall</small>
-                                            </div>
-                                        </div>
-                                    </button>
-
-                                    <button type="button" class="zone-visual-card" data-zone="Pottery Alcove" data-vibe="Intimate Backlit Ceramic Niche" data-img="komo3.webp">
-                                        <img src="komo3.webp" onerror="this.src='komo3.webp'" alt="Pottery Alcove">
-                                        <div class="zone-card-shade">
-                                            <span class="zone-check">✓</span>
-                                            <div>
-                                                <strong>Pottery Alcove</strong>
-                                                <small>Ceramic Wall</small>
-                                            </div>
-                                        </div>
-                                    </button>
-
-                                    <button type="button" class="zone-visual-card" data-zone="16-Seater Timber Table" data-vibe="Grand Solid Wood Communal Table" data-img="komologo.webp">
-                                        <img src="komologo.webp" onerror="this.src='komo2.webp'" alt="Communal Timber Table">
-                                        <div class="zone-card-shade">
-                                            <span class="zone-check">✓</span>
-                                            <div>
-                                                <strong>Timber Table</strong>
-                                                <small>Communal 8–16</small>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Step 2: Tactile Guest Dial & Custom 7-Day Date Strip (Zero iOS Overflow!) -->
-                            <div class="builder-step">
-                                <div class="step-label-row">
-                                    <span class="step-tag">02 / GUESTS & EVENING</span>
-                                    <span class="step-hint" id="liveSpendEstimate">Est. ₹3,200–4,800</span>
-                                </div>
-
-                                <!-- Compact Guest Counter Pills -->
-                                <div class="guest-pill-strip" id="partySizeSelector">
-                                    <button type="button" class="g-pill" data-guests="2">2 Guests</button>
-                                    <button type="button" class="g-pill active" data-guests="4">4 Guests</button>
-                                    <button type="button" class="g-pill" data-guests="6">6 Guests</button>
-                                    <button type="button" class="g-pill" data-guests="8">8+ Group</button>
-                                </div>
-
-                                <!-- Custom 7-Day Date Ribbon (Replaces broken mobile <input type="date">) -->
-                                <div class="date-ribbon-scroll" id="customDateRibbon" role="radiogroup" aria-label="Select Reservation Date">
-                                    <!-- Dynamically populated with next 7 days via script.js -->
-                                </div>
-                                <input type="hidden" id="guestDate" required>
-
-                                <!-- Visual Time Chips -->
-                                <div class="time-chips-row" id="customTimeSelector">
-                                    <button type="button" class="time-chip" data-time="01:30 PM">
-                                        <strong>01:30 PM</strong><span>Lunch</span>
-                                    </button>
-                                    <button type="button" class="time-chip" data-time="05:30 PM">
-                                        <strong>05:30 PM</strong><span>Coffee</span>
-                                    </button>
-                                    <button type="button" class="time-chip active" data-time="08:15 PM">
-                                        <strong>08:15 PM</strong><span>Dinner</span>
-                                    </button>
-                                    <button type="button" class="time-chip" data-time="09:45 PM">
-                                        <strong>09:45 PM</strong><span>Prime</span>
-                                    </button>
-                                    <button type="button" class="time-chip" data-time="11:15 PM">
-                                        <strong>11:15 PM</strong><span>Late Bistro</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Step 3: Minimal Bottom-Border Guest Signature -->
-                            <div class="builder-step last-step">
-                                <div class="signature-inputs-grid">
-                                    <div class="minimal-input-box">
-                                        <label for="guestName">RESERVATION UNDER NAME *</label>
-                                        <input type="text" id="guestName" placeholder="e.g. Rohan Shah" autocomplete="name" required>
-                                    </div>
-                                    <div class="minimal-input-box">
-                                        <label for="guestPhone">WHATSAPP / MOBILE *</label>
-                                        <input type="tel" id="guestPhone" placeholder="10-digit number" inputmode="numeric" pattern="[0-9]{10}" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn-issue-pass magnetic" data-cursor="Issue Pass">
-                                <span id="submitBtnLabel">Issue KOMO Table Pass</span>
-                                <span class="pass-arrow">→</span>
+                        <!-- 4 Tactile Mood Pills -->
+                        <div class="mood-selector-grid" id="moodSelectorGrid" role="tablist">
+                            <button type="button" class="mood-pill active" data-mood="midnight">
+                                <span class="m-time">11:30 PM — 01:00 AM</span>
+                                <strong>The Late-Night Drive</strong>
                             </button>
-                        </form>
+                            <button type="button" class="mood-pill" data-mood="date">
+                                <span class="m-time">COVE-LIT ALCOVE</span>
+                                <strong>Wood-Fired & Truffle Date</strong>
+                            </button>
+                            <button type="button" class="mood-pill" data-mood="feast">
+                                <span class="m-time">COMMUNAL TABLE</span>
+                                <strong>The Bodakdev Group Feast</strong>
+                            </button>
+                            <button type="button" class="mood-pill" data-mood="work">
+                                <span class="m-time">01:00 PM — 06:00 PM</span>
+                                <strong>Founder Brew & Focus</strong>
+                            </button>
+                        </div>
+
+                        <!-- 3-Card Visual Pairing Deck (Small Plate + Main + Kaffa Brew/Sweet) -->
+                        <div class="pairing-trio-grid" id="pairingTrioGrid">
+                            <!-- Card 1: First Course -->
+                            <article class="trio-dish-card">
+                                <div class="trio-img-wrap">
+                                    <img id="trioImg1" src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=600" alt="First Course">
+                                    <span class="trio-step-badge">01 · START</span>
+                                </div>
+                                <div class="trio-card-body">
+                                    <h4 id="trioTitle1">Chilli Cheese Dimsum</h4>
+                                    <span class="trio-price" id="trioPrice1">₹540</span>
+                                </div>
+                            </article>
+
+                            <!-- Card 2: Centerpiece -->
+                            <article class="trio-dish-card featured-trio">
+                                <div class="trio-img-wrap">
+                                    <img id="trioImg2" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=600" alt="Main Course">
+                                    <span class="trio-step-badge">02 · CENTERPIECE</span>
+                                </div>
+                                <div class="trio-card-body">
+                                    <h4 id="trioTitle2">Wood-Fired Mozzarella Pizza</h4>
+                                    <span class="trio-price" id="trioPrice2">₹780</span>
+                                </div>
+                            </article>
+
+                            <!-- Card 3: Finish / Brew -->
+                            <article class="trio-dish-card">
+                                <div class="trio-img-wrap">
+                                    <img id="trioImg3" src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&q=80&w=600" alt="Finish Course">
+                                    <span class="trio-step-badge">03 · FINISH</span>
+                                </div>
+                                <div class="trio-card-body">
+                                    <h4 id="trioTitle3">Lotus Biscoff Cheesecake</h4>
+                                    <span class="trio-price" id="trioPrice3">₹480</span>
+                                </div>
+                            </article>
+                        </div>
+
+                        <!-- Bottom Sommelier Note + Copy Order to Phone Button -->
+                        <div class="curator-footer-bar">
+                            <p class="sommelier-verdict" id="sommelierVerdict">
+                                “The undefeated 11:30 PM Bodakdev trio—molten dimsum, blistered sourdough pizza, and a Biscoff finale.”
+                            </p>
+                            <button type="button" class="btn-copy-order" id="copyPairingBtn" data-cursor="Save List">
+                                <span id="copyPairingText">Save Order to Phone 📋</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- RIGHT: Live Perforated KOMO Sanctuary Table Pass (Visual Ticket) -->
-                    <aside class="live-table-pass" id="liveTablePass" aria-label="Live Table Pass Preview">
-                        <div class="pass-visual-header">
-                            <img id="passZoneBg" src="komologo2.webp" onerror="this.src='komologo2.webp'" alt="Selected KOMO Zone">
-                            <div class="pass-header-overlay">
-                                <div class="pass-brand-row">
-                                    <span class="pass-komo">KOMO</span>
-                                    <span class="pass-badge" id="passStatusBadge">LIVE PREVIEW</span>
-                                </div>
-                                <p class="pass-zone-title" id="passZoneTitle">Cave Vault Hall</p>
+                    <!-- RIGHT: Live Walk-In Crowd Radar & Architectural Location Monolith -->
+                    <aside class="walkin-monolith-card">
+                        <!-- Top Live Stone Sign Header -->
+                        <div class="monolith-sign-banner">
+                            <img src="image_349953.png" onerror="this.onerror=null; this.src='image_63ffb2.jpg';" alt="KOMO Stone Sign">
+                            <div class="monolith-banner-shade">
+                                <span class="walkin-live-pill">
+                                    <span class="live-pulse-green"></span>
+                                    <span id="walkinStatusLabel">WALK-INS WELCOME NOW</span>
+                                </span>
+                                <span class="monolith-hours">OPEN DAILY · 11:00 AM – 01:00 AM</span>
                             </div>
                         </div>
 
-                        <!-- Perforated Ticket Notch Divider -->
-                        <div class="pass-perforation" aria-hidden="true">
-                            <span class="notch-left"></span>
-                            <span class="perf-line"></span>
-                            <span class="notch-right"></span>
-                        </div>
-
-                        <div class="pass-body">
-                            <div class="pass-specs-grid">
-                                <div class="pass-spec">
-                                    <span class="p-label">DATE</span>
-                                    <strong id="passDateReadout">Today</strong>
+                        <div class="monolith-body">
+                            <!-- Live Crowd & Wait-Time Meter (Synced to Ahmedabad Time) -->
+                            <div class="crowd-radar-box">
+                                <div class="radar-head">
+                                    <span class="mono-label">LIVE BODAKDEV FLOOR PULSE</span>
+                                    <strong id="crowdWaitText">Instant Seating · No Wait</strong>
                                 </div>
-                                <div class="pass-spec">
-                                    <span class="p-label">TIME SLOT</span>
-                                    <strong id="passTimeReadout">08:15 PM</strong>
-                                </div>
-                                <div class="pass-spec">
-                                    <span class="p-label">TABLE FOR</span>
-                                    <strong id="passGuestsReadout">4 Guests</strong>
-                                </div>
-                                <div class="pass-spec">
-                                    <span class="p-label">GUEST NAME</span>
-                                    <strong id="passNameReadout">Your Table</strong>
+                                <div class="radar-bars" id="crowdRadarBars" aria-hidden="true">
+                                    <span class="r-bar" data-slot="12P"><i></i><small>12P</small></span>
+                                    <span class="r-bar" data-slot="3P"><i></i><small>3P</small></span>
+                                    <span class="r-bar" data-slot="6P"><i></i><small>6P</small></span>
+                                    <span class="r-bar peak" data-slot="9P"><i></i><small>9P</small></span>
+                                    <span class="r-bar active" data-slot="12A"><i></i><small>12A</small></span>
                                 </div>
                             </div>
 
-                            <div class="pass-footer-bar">
-                                <div class="pass-barcode" aria-hidden="true"></div>
-                                <div class="pass-foot-meta">
-                                    <span>RAJPATH RANGOLI RD, BODAKDEV</span>
-                                    <span id="passRefCode">REF #KM-2700K</span>
+                            <!-- Direct Address & Valet Specs -->
+                            <div class="monolith-specs">
+                                <div class="m-spec-row">
+                                    <span class="m-key">SANCTUARY</span>
+                                    <p>Rajpath Rangoli Rd, behind Rajpath Club,<br>Bodakdev, Ahmedabad, Gujarat 380059</p>
                                 </div>
+                                <div class="m-spec-row">
+                                    <span class="m-key">PARKING</span>
+                                    <p>Dedicated Valet & Curbside Drop-off Available</p>
+                                </div>
+                            </div>
+
+                            <!-- 1-Tap Action Buttons -->
+                            <div class="monolith-cta-stack">
+                                <a href="https://maps.google.com/?q=KOMO+by+KAFFA+Bodakdev+Ahmedabad" target="_blank" rel="noopener" class="btn-monolith-primary magnetic" data-cursor="Navigate">
+                                    <span>Launch Google Maps Directions</span>
+                                    <span>↗</span>
+                                </a>
+                                <a href="tel:09925076666" class="btn-monolith-secondary magnetic" data-cursor="Call Desk">
+                                    <span>Call Floor Desk · 099250 76666</span>
+                                    <span>📞</span>
+                                </a>
                             </div>
                         </div>
                     </aside>

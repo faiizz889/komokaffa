@@ -191,36 +191,39 @@ document.addEventListener("DOMContentLoaded", () => {
     updateAhmedabadClock();
     setInterval(updateAhmedabadClock, 30000);
 
-
-    // ========================================================================
-    // 03. SCULPTED STONE MONOLITH LOGO (3D TILT & 2700K HALO TRACKING)
+// ========================================================================
+    // 03. PROCEDURAL 3D STONE MONOLITH LOGO (DYNAMIC SVG LIGHT AZIMUTH & TILT)
     // ========================================================================
     const komoStoneLogo = document.getElementById("komoStoneLogo");
-    const stoneBoulder = komoStoneLogo?.querySelector(".stone-boulder");
+    const monolithBoulder = document.getElementById("monolithBoulder");
+    const svgStoneLight = document.getElementById("svgStoneLight");
 
-    if (komoStoneLogo && stoneBoulder) {
+    if (komoStoneLogo && monolithBoulder) {
         komoStoneLogo.addEventListener("mousemove", (e) => {
             if (!isFinePointer()) return;
-            const rect = stoneBoulder.getBoundingClientRect();
-            const relX = ((e.clientX - rect.left) / rect.width) * 100;
-            const relY = ((e.clientY - rect.top) / rect.height) * 100;
+            const rect = monolithBoulder.getBoundingClientRect();
+            const normX = (e.clientX - rect.left) / rect.width - 0.5;
+            const normY = (e.clientY - rect.top) / rect.height - 0.5;
 
-            stoneBoulder.style.setProperty("--halo-x", `${relX.toFixed(1)}%`);
-            stoneBoulder.style.setProperty("--halo-y", `${relY.toFixed(1)}%`);
+            // Subtle 3D sculptural tilt
+            const tiltY = normX * 14;
+            const tiltX = normY * -14;
+            monolithBoulder.style.transform = `perspective(520px) rotateX(${tiltX.toFixed(1)}deg) rotateY(${tiltY.toFixed(1)}deg) scale(1.035)`;
 
-            const tiltY = ((e.clientX - rect.left) / rect.width - 0.5) * 14;
-            const tiltX = ((e.clientY - rect.top) / rect.height - 0.5) * -14;
-            stoneBoulder.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03)`;
+            // Dynamically shift the SVG 3D stone relief light angle
+            if (svgStoneLight) {
+                const angle = Math.round(235 + normX * 70);
+                svgStoneLight.setAttribute("azimuth", String(angle));
+            }
         });
 
         komoStoneLogo.addEventListener("mouseleave", () => {
-            stoneBoulder.style.setProperty("--halo-x", "50%");
-            stoneBoulder.style.setProperty("--halo-y", "50%");
-            stoneBoulder.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+            monolithBoulder.style.transform = "perspective(520px) rotateX(0deg) rotateY(0deg) scale(1)";
+            if (svgStoneLight) {
+                svgStoneLight.setAttribute("azimuth", "235");
+            }
         });
     }
-
-
     // ========================================================================
     // 04. MOBILE & TABLET ARCHITECTURAL SHEET DRAWER
     // ========================================================================
@@ -709,140 +712,144 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
+   // ========================================================================
+    // 10. SECTION 5: INTERACTIVE TABLE SOMMELIER & LIVE WALK-IN CROWD RADAR
     // ========================================================================
-    // 10. SECTION 5: VISUAL SANCTUARY BOOKING, 7-DAY STRIP & LIVE TABLE PASS
-    // ========================================================================
-    const zoneCards = Array.from(document.querySelectorAll(".zone-visual-card"));
-    const guestPills = Array.from(document.querySelectorAll(".g-pill"));
-    const timeChips = Array.from(document.querySelectorAll(".time-chip"));
-    const dateRibbon = document.getElementById("customDateRibbon");
-    const hiddenDateInput = document.getElementById("guestDate");
-    const guestNameInput = document.getElementById("guestName");
-    const liveSpendEstimate = document.getElementById("liveSpendEstimate");
-    const zoneVibeHint = document.getElementById("zoneVibeHint");
-
-    const liveTablePass = document.getElementById("liveTablePass");
-    const passZoneBg = document.getElementById("passZoneBg");
-    const passZoneTitle = document.getElementById("passZoneTitle");
-    const passDateReadout = document.getElementById("passDateReadout");
-    const passTimeReadout = document.getElementById("passTimeReadout");
-    const passGuestsReadout = document.getElementById("passGuestsReadout");
-    const passNameReadout = document.getElementById("passNameReadout");
-    const passStatusBadge = document.getElementById("passStatusBadge");
-    const passRefCode = document.getElementById("passRefCode");
-
-    // 1. Dynamically Generate Next 7 Days in Touch Date Ribbon
-    if (dateRibbon) {
-        dateRibbon.innerHTML = "";
-        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const today = new Date();
-
-        for (let i = 0; i < 7; i++) {
-            const d = new Date(today);
-            d.setDate(today.getDate() + i);
-
-            const iso = d.toISOString().split("T")[0];
-            const dayLabel = i === 0 ? "Today" : i === 1 ? "Tmrw" : dayNames[d.getDay()];
-            const numLabel = d.getDate();
-            const monLabel = monthNames[d.getMonth()];
-            const passFormatted = `${dayLabel}, ${numLabel} ${monLabel}`;
-
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = `date-tile ${i === 0 ? "active" : ""}`;
-            btn.dataset.iso = iso;
-            btn.dataset.formatted = passFormatted;
-            btn.innerHTML = `
-                <span class="d-day">${dayLabel}</span>
-                <strong class="d-num">${numLabel}</strong>
-                <span class="d-mon">${monLabel}</span>
-            `;
-
-            if (i === 0 && hiddenDateInput) {
-                hiddenDateInput.value = iso;
-                if (passDateReadout) passDateReadout.textContent = passFormatted;
-            }
-
-            btn.addEventListener("click", () => {
-                dateRibbon.querySelectorAll(".date-tile").forEach((t) => t.classList.remove("active"));
-                btn.classList.add("active");
-                if (hiddenDateInput) hiddenDateInput.value = iso;
-                if (passDateReadout) passDateReadout.textContent = passFormatted;
-            });
-
-            dateRibbon.appendChild(btn);
+    const moodPairings = {
+        midnight: {
+            est: "~₹900 / person (for 2)",
+            verdict: "“The undefeated 11:30 PM Bodakdev trio—molten dimsum, blistered sourdough pizza, and a Biscoff finale.”",
+            dishes: [
+                { title: "Chilli Cheese Dimsum", price: "₹540", img: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=600" },
+                { title: "Wood-Fired Mozzarella Pizza", price: "₹780", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=600" },
+                { title: "Lotus Biscoff Cheesecake", price: "₹480", img: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&q=80&w=600" }
+            ]
+        },
+        date: {
+            est: "~₹845 / person (for 2)",
+            verdict: "“Designed for the backlit pottery alcove—aromatic white truffle dumplings, blue-pea Thai curry, and tiramisu espresso.”",
+            dishes: [
+                { title: "Edamame Truffle Dimsum", price: "₹590", img: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80&w=600" },
+                { title: "Thai Curry & Blue Pea Rice", price: "₹740", img: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&q=80&w=600" },
+                { title: "Tiramisu Latte", price: "₹360", img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&q=80&w=600" }
+            ]
+        },
+        feast: {
+            est: "~₹1,150 / person (Group Share)",
+            verdict: "“Built for the 16-seater timber table—start with wood-fired pita & hummus, dip into Swiss fondue, and cool down with Kaffa cold coffee.”",
+            dishes: [
+                { title: "Signature Mezze Platter", price: "₹890", img: "https://images.unsplash.com/photo-1541514321650-3ce48eb909bc?auto=format&fit=crop&q=80&w=600" },
+                { title: "Classic Swiss Cheese Fondue", price: "₹850", img: "https://images.unsplash.com/photo-1548340748-6d2b7d7da280?auto=format&fit=crop&q=80&w=600" },
+                { title: "Classic Cold Coffee", price: "₹310", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80&w=600" }
+            ]
+        },
+        work: {
+            est: "~₹680 / person (Solo / Duo)",
+            verdict: "“Acoustic stucco calm, fast Wi-Fi energy, creamy burrata sourdough, and an 18-hour steeped Cranberry Cold Brew.”",
+            dishes: [
+                { title: "Avocado Burrata on Toast", price: "₹680", img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=600" },
+                { title: "Peri Peri French Fries", price: "₹340", img: "https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&q=80&w=600" },
+                { title: "Cranberry Cold Brew", price: "₹340", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" }
+            ]
         }
-    }
+    };
 
-    // 2. Visual Space Cards -> Sync with Live Ticket Pass
-    zoneCards.forEach((card) => {
-        card.addEventListener("click", () => {
-            zoneCards.forEach((c) => c.classList.remove("active"));
-            card.classList.add("active");
-            if (passZoneTitle) passZoneTitle.textContent = card.dataset.zone || "";
-            if (zoneVibeHint) zoneVibeHint.textContent = card.dataset.vibe || "";
-            if (passZoneBg && card.dataset.img) {
-                passZoneBg.src = card.dataset.img;
-            }
-        });
-    });
+    const moodPills = Array.from(document.querySelectorAll(".mood-pill"));
+    const trioCards = Array.from(document.querySelectorAll(".trio-dish-card"));
+    const pairingEstTag = document.getElementById("pairingEstTag");
+    const sommelierVerdict = document.getElementById("sommelierVerdict");
+    const copyPairingBtn = document.getElementById("copyPairingBtn");
+    const copyPairingText = document.getElementById("copyPairingText");
+    let currentMoodKey = "midnight";
 
-    // 3. Guest Count Pills -> Sync Spend Estimate & Pass Readout
-    guestPills.forEach((pill) => {
-        pill.addEventListener("click", () => {
-            guestPills.forEach((p) => p.classList.remove("active"));
-            pill.classList.add("active");
-            const count = Number(pill.dataset.guests) || 4;
-            const min = (count * 800).toLocaleString("en-IN");
-            const max = (count * 1400).toLocaleString("en-IN");
-            if (liveSpendEstimate) liveSpendEstimate.textContent = `Est. ₹${min}–${max}`;
-            if (passGuestsReadout) passGuestsReadout.textContent = pill.textContent;
-        });
-    });
+    function selectTableMood(moodKey) {
+        const data = moodPairings[moodKey];
+        if (!data) return;
+        currentMoodKey = moodKey;
 
-    // 4. Time Chips -> Sync Pass Time Readout
-    timeChips.forEach((chip) => {
-        chip.addEventListener("click", () => {
-            timeChips.forEach((c) => c.classList.remove("active"));
-            chip.classList.add("active");
-            if (passTimeReadout) passTimeReadout.textContent = chip.dataset.time || "";
-        });
-    });
-
-    // 5. Guest Name Input -> Live Ticket Engraving
-    guestNameInput?.addEventListener("input", (e) => {
-        const val = e.target.value.trim();
-        if (passNameReadout) {
-            passNameReadout.textContent = val || "Your Table";
-        }
-    });
-
-    // 6. Submit Reservation & Issue Confirmed Pass
-    const reservationForm = document.getElementById("reservationForm");
-    reservationForm?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (!reservationForm.checkValidity()) {
-            reservationForm.reportValidity();
-            return;
-        }
-
-        const btnLabel = document.getElementById("submitBtnLabel");
-        const randomRef = `REF #KM-${Math.floor(1000 + Math.random() * 9000)}`;
-
-        if (btnLabel) btnLabel.textContent = "Minting Your Table Pass...";
+        moodPills.forEach((p) => p.classList.toggle("active", p.dataset.mood === moodKey));
+        trioCards.forEach((c) => c.classList.add("dealing"));
 
         setTimeout(() => {
-            if (btnLabel) btnLabel.textContent = "Pass Issued ✓ (Reserved)";
-            if (liveTablePass) liveTablePass.classList.add("confirmed");
-            if (passStatusBadge) passStatusBadge.textContent = "CONFIRMED PASS";
-            if (passRefCode) passRefCode.textContent = randomRef;
+            data.dishes.forEach((dish, i) => {
+                const idx = i + 1;
+                const imgEl = document.getElementById(`trioImg${idx}`);
+                const titleEl = document.getElementById(`trioTitle${idx}`);
+                const priceEl = document.getElementById(`trioPrice${idx}`);
+                if (imgEl) imgEl.src = dish.img;
+                if (titleEl) titleEl.textContent = dish.title;
+                if (priceEl) priceEl.textContent = dish.price;
+            });
 
-            if (!isDesktop() && liveTablePass) {
-                liveTablePass.scrollIntoView({ behavior: "smooth", block: "center" });
-            }
-        }, 450);
+            if (pairingEstTag) pairingEstTag.textContent = data.est;
+            if (sommelierVerdict) sommelierVerdict.textContent = data.verdict;
+            if (copyPairingText) copyPairingText.textContent = "Save Order to Phone 📋";
+            trioCards.forEach((c) => c.classList.remove("dealing"));
+        }, 160);
+    }
+
+    moodPills.forEach((pill) => {
+        pill.addEventListener("click", () => selectTableMood(pill.dataset.mood));
     });
+
+    // 1-Tap Copy Curated Order to Phone Clipboard
+    copyPairingBtn?.addEventListener("click", () => {
+        const data = moodPairings[currentMoodKey];
+        if (!data) return;
+        const textToCopy = `KOMO by KAFFA Order (${data.est}):\n1. ${data.dishes[0].title} (${data.dishes[0].price})\n2. ${data.dishes[1].title} (${data.dishes[1].price})\n3. ${data.dishes[2].title} (${data.dishes[2].price})\n📍 Behind Rajpath Club, Bodakdev`;
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(textToCopy).catch(() => {});
+        }
+        if (copyPairingText) {
+            copyPairingText.textContent = "Copied to Clipboard ✓";
+            setTimeout(() => {
+                copyPairingText.textContent = "Save Order to Phone 📋";
+            }, 3000);
+        }
+    });
+
+    // Live Ahmedabad Hour Walk-In Crowd Radar
+    function syncWalkinRadar() {
+        const waitTextEl = document.getElementById("crowdWaitText");
+        const statusLabel = document.getElementById("walkinStatusLabel");
+        const radarBars = Array.from(document.querySelectorAll(".r-bar"));
+        if (!waitTextEl) return;
+
+        try {
+            const now = new Date();
+            const ist = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+            const hr = ist.getHours();
+
+            let activeIdx = 0;
+            let waitMsg = "Instant Walk-In Seating · Zero Wait";
+
+            if (hr >= 1 && hr < 11) {
+                if (statusLabel) statusLabel.textContent = "OPENS AT 11:00 AM";
+                waitMsg = "Currently Closed · Opens 11 AM";
+                activeIdx = 0;
+            } else if (hr >= 11 && hr < 15) {
+                activeIdx = 0;
+                waitMsg = "Calm Midday Vaults · Instant Seating";
+            } else if (hr >= 15 && hr < 18) {
+                activeIdx = 1;
+                waitMsg = "Afternoon Coffee Flow · Zero Wait";
+            } else if (hr >= 18 && hr < 20) {
+                activeIdx = 2;
+                waitMsg = "Golden Hour Lively Vibe · ~5 Min Wait";
+            } else if (hr >= 20 && hr < 23) {
+                activeIdx = 3;
+                waitMsg = "Peak Dinner Energy · ~10–15 Min Wait";
+            } else {
+                activeIdx = 4;
+                waitMsg = "Late-Night Bistro Vibe · Instant Seating";
+            }
+
+            waitTextEl.textContent = waitMsg;
+            radarBars.forEach((b, i) => b.classList.toggle("active", i === activeIdx));
+        } catch (_) {}
+    }
+    syncWalkinRadar();
 
 
     // ========================================================================
